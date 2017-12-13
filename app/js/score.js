@@ -16,7 +16,7 @@ class Score {
 
   update() {
     const ctx = gameArea.context;
-    gameArea.frameNo += 1;
+    //gameArea.frameNo += 1;
 
     this.distance = parseInt((gameArea.frameNo / 50) * this.speed);
     this.calories = parseInt((gameArea.frameNo / 50) * 0.2);

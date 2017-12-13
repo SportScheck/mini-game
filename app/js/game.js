@@ -18,7 +18,7 @@ let clouds;
 let skyline;
 let runner;
 let score;
-let obstacle;
+let obstaclesArray = new Array();
 
 function assetLoaded() {
   loadedAssets++;
@@ -38,7 +38,7 @@ function preloader() {
   urls[1] = './assets/clouds.png';
   urls[2] = './assets/skyline.png';
   urls[3] = './assets/runner_sprite.png';
-  urls[4] = './assets/obstacle.png';
+  urls[4] = './assets/fire_sprite.png';
 
   totalAssets = urls.length;
 
@@ -53,10 +53,14 @@ function preloader() {
 }
 
 function createObstacles() {
+  if (gameArea.frameNo == 1 || ((gameArea.frameNo / 150) % 1 == 0)) {
+    obstaclesArray.push(new Obstacle(images[4], 1.5));
+  }
 }
 
 function animate() {
-   window.requestAnimationFrame( animate );
+   window.requestAnimationFrame(animate);
+   gameArea.frameNo++;
    gameArea.context.clearRect(0, 0, gameArea.canvas.width, gameArea.canvas.height);
 
    skyline.draw();
@@ -66,7 +70,12 @@ function animate() {
    runner.update();
    runner.draw();
 
-   obstacle.draw();
+   createObstacles();
+   obstaclesArray.forEach((obstacle) => {
+     // TODO: Dont forget to pop the obstacle of the array!!!!!!
+     obstacle.update();
+     obstacle.draw();
+   });
 
    score.update();
 }
@@ -76,9 +85,8 @@ function startGame() {
 
   skyline = new Background(images[2], 0.3, 0, 40);
   clouds = new Background(images[1], 0.6, 0, 40);
-  ground = new Background(images[0], 1, 0, 280);
+  ground = new Background(images[0], 1.5, 0, 280);
   runner = new Runner(images[3]);
-  obstacle = new Obstacle(images[4], 1);
   score = new Score();
 
   Background.prototype.context = gameArea.context;

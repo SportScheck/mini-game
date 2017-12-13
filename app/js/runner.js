@@ -1,7 +1,7 @@
 const RUNNER_HEIGHT = 72;
 const RUNNER_WIDTH = 40;
 const RUNNER_SPEED = 8;
-const JUMP_TIME = 20;
+const JUMP_TIME = 120;
 
 class Runner {
   constructor(image) {
@@ -16,7 +16,7 @@ class Runner {
     this.jumpCounter = JUMP_TIME;
     // this.gravity   = 1;
     this.dy        = 0;
-    this.jumpDy    = -10;
+    this.jumpDy    = -2;
     this.isFalling = false;
     this.isJumping = false;
     this.x = 60;
