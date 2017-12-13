@@ -1,31 +1,80 @@
-const player = (function (myGameArea) {
+const RUNNER_HEIGHT = 125;
+const RUNNER_WIDTH = 125;
+const RUNNER_SPEED = 4;
+const JUMP_TIME = 20;
 
-  const playerSprite = new Image();
-  playerSprite.src = '../assets/normal_walk.png';
+function Runner() {
+  var frameWidth = RUNNER_WIDTH;
+  var frameHeight = RUNNER_HEIGHT;
+  var endFrame = 16;
+  var frameSpeed = RUNNER_SPEED;
+  var currentFrame = 0;  // the current frame to draw
+  var counter = 0;
 
-  this.width = 30;
-  this.height = 30;
-  this.x = 10;
-  this.y = 10;
+  var jumpCounter = JUMP_TIME;
 
-  let ctx = myGameArea.context;
-  ctx.fillStyle = 'red';
-  ctx.fillRect(this.x, this.y, this.width, this.height);
-  // player.width = 10;
-  // player.height = 18;
-  //
-  // player.isJumping = false;
-  // player.isFalling = false;
-  //
-  // player.sheet = new SpriteSheet('../assets/normal_walk.png', player.width, player.height);
-  // player.walkingAnim  = new Animation(player.sheet, 4, 0, 15);
-  // player.jumpingAnim  = new Animation(player.sheet, 4, 15, 15);
-  // player.fallingAnim  = new Animation(player.sheet, 4, 11, 11);
-  //
-  // player.reset = function() {
-  //   player.x = 10;
-  //   player.y = 10;
-  // }
+  this.gravity   = 1;
+  this.dy        = 0;
+  this.jumpDy    = -10;
+  this.isFalling = false;
+  this.isJumping = false;
 
-  return ctx;
-});
+  let _this = this;
+
+  this.jump = function() {
+    if (this.isJumping) {
+      this.dy += this.jumpDy;
+      jumpCounter--;
+    }
+
+    if (this.isFalling) {
+      this.dy -= this.jumpDy;
+      jumpCounter--;
+    }
+
+    if (jumpCounter === JUMP_TIME / 2) {
+      this.isJumping = false;
+      this.isFalling = true;
+    }
+
+    if (jumpCounter === 0) {
+      this.isFalling = false;
+      jumpCounter = JUMP_TIME;
+    }
+  }
+
+  this.update = function() {
+
+    // update to the next frame if it is time
+    if (counter == (frameSpeed - 1))
+      currentFrame = (currentFrame + 1) % endFrame;
+
+    // update the counter
+    counter = (counter + 1) % frameSpeed;
+  }
+
+  this.draw = function(x, y) {
+      var framesPerRow = Math.floor(this.image.width / frameWidth);
+
+      // get the row and col of the frame
+      var row = Math.floor(currentFrame / framesPerRow);
+      var col = Math.floor(currentFrame % framesPerRow);
+
+      this.jump();
+
+      gameArea.context.drawImage(
+         this.image,
+         col * frameWidth, row * frameHeight,
+         frameWidth, frameHeight,
+         x, y + this.dy,
+         frameWidth, frameHeight);
+  };
+
+  window.addEventListener('keydown', function(e) {
+    if (e.keyCode === 32 && !_this.isFalling) {
+      _this.isJumping = true;
+    }
+  });
+}
+
+Runner.prototype = new component(RUNNER_WIDTH, RUNNER_HEIGHT, './assets/spritesheet.png', 'type', 12.5, 12.5);

@@ -5,17 +5,19 @@ const gameArea = {
   }
 }
 
-let spritesheet = new SpriteSheet('./assets/spritesheet.png', 125, 125, 4, 16);
 let background = new Background();
-background.init(0,0);
+let runner = new Runner();
+background.init();
+runner.init();
 
 function animate() {
    window.requestAnimationFrame( animate );
    gameArea.context.clearRect(0, 0, gameArea.canvas.width, gameArea.canvas.height);
-   spritesheet.update();
-   spritesheet.draw(12.5, 12.5);
 
    background.draw();
+
+   runner.update();
+   runner.draw(12.5, 12.5);
 }
 
 function startGame() {
