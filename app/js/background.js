@@ -1,8 +1,13 @@
-function Background() {
-	this.speed = 1; // Redefine speed of the background for panning
-	// Implement abstract function
+class Background {
+	constructor(image, speed) {
+		//super(600, 600, url, 0, 120);
+		this.x = 0;
+		this.y = 120;
+		this.image = image;
+		this.speed = speed; // Redefine speed of the background for panning
+	}
 
-	this.draw = function() {
+	draw() {
 		// Pan background
 		this.x -= this.speed;
 		this.context.drawImage(this.image, this.x, this.y);
@@ -11,7 +16,5 @@ function Background() {
 		// If the image scrolled off the screen, reset
 		if (Math.abs(this.x) >= this.image.width)
 			this.x = 0;
-	};
+	}
 }
-
-Background.prototype = new component(600, 600, './assets/ground.png', 'type', 0, 120);
