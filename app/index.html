@@ -4,13 +4,21 @@
     <meta charset="utf-8">
     <title>Mini Game</title>
   </head>
+
+  <style>
+  @font-face {
+    font-family: 'GameFont';
+    src: url('./assets/font.ttf');
+  }
+  </style>
+
   <body>
     <canvas id="minigame" width="600" height="300"></canvas>
 
     <!--build:js js/main.min.js -->
-    <script src="js/component.js" charset="utf-8"></script>
     <script src="js/background.js" charset="utf-8"></script>
     <script src="js/runner.js" charset="utf-8"></script>
+    <script src="js/obstacle.js" charset="utf-8"></script>
     <script src="js/score.js" charset="utf-8"></script>
     <script src="js/game.js" charset="utf-8"></script>
     <!-- endbuild -->

@@ -1,4 +1,4 @@
-const SCORE_FONT = 'Arial';
+const SCORE_FONT = 'GameFont';
 const SCORE_SIZE = '15px';
 
 
@@ -10,7 +10,7 @@ class Score {
      this.color = 'black';
      this.distance = 0;
      this.calories = 0;
-     this.x = 400;
+     this.x = 300;
      this.y = 40;
    }
 
@@ -21,10 +21,11 @@ class Score {
     this.distance = parseInt((gameArea.frameNo / 50) * this.speed);
     this.calories = parseInt((gameArea.frameNo / 50) * 0.2);
 
-    score.text = 'DISTANZ: ' + this.distance + 'm ' + 'KALORIEN: ' + this.calories;
+    score.text = 'DISTANZ: ' + this.distance + 'm ';
 
     ctx.font = this.size + " " + this.font;
     ctx.fillStyle = this.color;
+    ctx.textAlign="center";
     ctx.fillText(this.text, this.x, this.y);
   }
 }

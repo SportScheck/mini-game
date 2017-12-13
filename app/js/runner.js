@@ -1,6 +1,6 @@
-const RUNNER_HEIGHT = 125;
-const RUNNER_WIDTH = 125;
-const RUNNER_SPEED = 4;
+const RUNNER_HEIGHT = 72;
+const RUNNER_WIDTH = 40;
+const RUNNER_SPEED = 8;
 const JUMP_TIME = 20;
 
 class Runner {
@@ -8,7 +8,7 @@ class Runner {
     this.image = image;
     this.frameWidth = RUNNER_WIDTH;
     this.frameHeight = RUNNER_HEIGHT;
-    this.endFrame = 15;
+    this.endFrame = 3;
     this.frameSpeed = RUNNER_SPEED;
     this.framesPerRow = Math.floor(this.image.width / this.frameWidth);
     this.currentFrame = 0;
@@ -19,8 +19,8 @@ class Runner {
     this.jumpDy    = -10;
     this.isFalling = false;
     this.isJumping = false;
-    this.x = 12.5;
-    this.y = 12.5;
+    this.x = 60;
+    this.y = 220;
 
     const self = this;
 
@@ -64,7 +64,6 @@ class Runner {
   };
 
   runningAnim(col, row, frameWidth, frameHeight, x, y) {
-    console.log('runningAnim');
     gameArea.context.drawImage(
        this.image,
        col * frameWidth, row * frameHeight,
@@ -76,7 +75,7 @@ class Runner {
   jumpingAnim(col, row, frameWidth, frameHeight, x, y) {
     gameArea.context.drawImage(
        this.image,
-       frameWidth * 3, frameHeight * 3,
+       frameWidth, 0,
        frameWidth, frameHeight,
        x, y + this.dy,
        frameWidth, frameHeight);
