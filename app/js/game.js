@@ -2,6 +2,7 @@ const gameArea = {
   canvas: document.getElementById('minigame'),
   start: function() {
     this.context = this.canvas.getContext('2d');
+    this.frameNo = 0;
   }
 }
 
@@ -11,6 +12,7 @@ let images = new Array();
 
 let ground;
 let runner;
+let score;
 
 function assetLoaded() {
   loadedAssets++;
@@ -51,6 +53,8 @@ function animate() {
 
    runner.update();
    runner.draw();
+
+   score.update();
 }
 
 function startGame() {
@@ -58,6 +62,7 @@ function startGame() {
 
   ground = new Background(images[0], 1);
   runner = new Runner(images[1]);
+  score = new Score();
 
   Background.prototype.context = gameArea.context;
 	Background.prototype.canvasWidth = gameArea.width;
