@@ -42,7 +42,7 @@ class Runner {
   }
 
   updateLevel() {
-    console.log('update level', this.dy);
+    // console.log('update level', this.dy);
     this.jumpTime = JUMP_TIME - this.level * 10;
     this.jumpCounter = this.jumpTime;
     this.jumpDy = -2 - (this.level * 0.2);
@@ -52,17 +52,17 @@ class Runner {
     if (this.isJumping) {
       this.dy += this.jumpDy;
       this.jumpCounter--;
-      console.log(this.jumpCounter, this.dy);
+      // console.log(this.jumpCounter, this.dy);
     }
 
     if (this.isFalling) {
       this.dy -= this.jumpDy;
       this.jumpCounter--;
-      console.log(this.jumpCounter, this.dy);
+      // console.log(this.jumpCounter, this.dy);
     }
 
     if (this.jumpCounter === this.jumpTime / 2) {
-      console.log(this.jumpCounter, this.jumpTime);
+      // console.log(this.jumpCounter, this.jumpTime);
       this.isJumping = false;
       this.isFalling = true;
     }
@@ -122,8 +122,10 @@ class Runner {
     this.isJumping = false;
     this.isFalling = false;
     this.dy        = 0;
+    this.jumpDy    = -2;
     this.currentFrame = 0;
     this.counter = 0;
+    this.jumpTime = JUMP_TIME - level * 10;
     this.jumpCounter = this.jumpTime;
   }
 

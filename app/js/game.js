@@ -132,7 +132,7 @@ function animate() {
 
       if (obstacleNo > 5) {
         for (i = 0; i < obstacleNo - 2; i++) {
-          obstaclesArray.splice(i);
+          obstaclesArray.shift();
         }
       }
     });
@@ -140,6 +140,10 @@ function animate() {
    score.update();
 
    if (isCrashed) {
+     runner.level = 0;
+     runner.reset();
+     ground.speed = GROUND_SPEED;
+     obstacleSpeed = GROUND_SPEED;
      score.done();
      gameArea.stop();
      splashScreen = true;
