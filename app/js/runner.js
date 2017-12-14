@@ -19,6 +19,7 @@ class Runner {
     this.jumpDy    = -2;
     this.isFalling = false;
     this.isJumping = false;
+    this.isCrashed = false;
     this.x = 60;
     this.y = 220;
 
@@ -83,6 +84,20 @@ class Runner {
     gameArea.context.strokeRect(x, y + this.dy, frameWidth, frameHeight);
   };
 
+  crashAnim(col, row, frameWidth, frameHeight, x, y) {
+    gameArea.context.drawImage(
+       this.image,
+       frameWidth * 3, 0,
+       frameWidth, frameHeight,
+       x, y + this.dy,
+       frameWidth, frameHeight);
+    gameArea.context.strokeRect(x, y + this.dy, frameWidth, frameHeight);
+  };
+
+  crash() {
+    this.isCrashed = true;
+  }
+
   draw() {
       // get the row and col of the frame
       const row = Math.floor(this.currentFrame / this.framesPerRow);
@@ -90,7 +105,9 @@ class Runner {
 
       this.jump();
 
-      if (this.isJumping || this.isFalling) {
+      if (this.isCrashed) {
+        this.crashAnim(col, row, this.frameWidth, this.frameHeight, this.x, this.y)
+      } else if (this.isJumping || this.isFalling) {
         this.jumpingAnim(col, row, this.frameWidth, this.frameHeight, this.x, this.y);
       } else {
         this.runningAnim(col, row, this.frameWidth, this.frameHeight, this.x, this.y);

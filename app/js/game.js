@@ -92,6 +92,9 @@ function animate() {
 
    obstaclesArray.forEach((obstacle) => {
      if(crash(runner, obstacle)) {
+       runner.crash();
+       runner.update();
+       runner.draw();
        gameArea.stop();
      }
    });
