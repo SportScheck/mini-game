@@ -86,7 +86,7 @@ function preloader() {
 }
 
 function createObstacles() {
-  if (gameArea.frameNo == 1 || (gameArea.frameNo / 150 % 1 == 0)) {
+  if (gameArea.frameNo == 1 || (gameArea.frameNo / 130 % 1 == 0)) {
     const randomFactor = Math.floor(Math.random() * (100 - 1) + 1);
     if (randomFactor % 2 === 0) {
       obstaclesArray.push(new Obstacle(images[4], obstacleSpeed, 600 + randomFactor));
@@ -161,11 +161,18 @@ function animate() {
    }
 }
 
+function updateSpeed(obstacles, newSpeed) {
+  for (i = 0; i < obstacles.length; i++) {
+    obstacles[i].speed = newSpeed;
+  }
+}
+
 function nextLevel() {
   level += 1;
   runner.nextLevel(level);
   ground.speed = GROUND_SPEED + level / 2;
   obstacleSpeed = GROUND_SPEED + level / 2;
+  updateSpeed(obstaclesArray, obstacleSpeed);
 }
 
 function startGame() {

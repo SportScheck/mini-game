@@ -21,12 +21,28 @@
   #minigame {
     display: none;
   }
+
+  @media (orientation: landscape) {
+    #splashScreen {
+      background-image: url('./assets/game_startscreen.png');
+      background-size: cover;
+      width: 800px;
+      height: 400px;
+    }
+
+    #minigame {
+      display: none;
+      width: 800px;
+      height: 400px;
+    }
+  }
+
   </style>
 
   <body>
     <div id='splashScreen'></div>
 
-    <canvas id="minigame" width="600" height="300"></canvas>
+    <canvas id='minigame' width='600' height='300'></canvas>
 
     <!--build:js js/main.min.js -->
     <script src="js/background.js" charset="utf-8"></script>
