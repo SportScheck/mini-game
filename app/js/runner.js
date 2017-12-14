@@ -1,7 +1,7 @@
 const RUNNER_HEIGHT = 72;
 const RUNNER_WIDTH = 40;
 const RUNNER_SPEED = 8;
-const JUMP_TIME = 120;
+const JUMP_TIME = 130;
 
 class Runner {
   constructor(image) {
@@ -70,6 +70,7 @@ class Runner {
        frameWidth, frameHeight,
        x, y + this.dy,
        frameWidth, frameHeight);
+    gameArea.context.strokeRect(x, y + this.dy, frameWidth, frameHeight);
   };
 
   jumpingAnim(col, row, frameWidth, frameHeight, x, y) {
@@ -79,6 +80,7 @@ class Runner {
        frameWidth, frameHeight,
        x, y + this.dy,
        frameWidth, frameHeight);
+    gameArea.context.strokeRect(x, y + this.dy, frameWidth, frameHeight);
   };
 
   draw() {

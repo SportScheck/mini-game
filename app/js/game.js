@@ -1,3 +1,5 @@
+let myReq;
+
 const gameArea = {
   canvas: document.getElementById('minigame'),
   start: function() {
@@ -5,7 +7,7 @@ const gameArea = {
     this.frameNo = 0;
   },
   stop: function() {
-    clearInterval(window.requestAnimationFrame());
+    window.cancelAnimationFrame(myReq);
   }
 }
 
@@ -66,7 +68,7 @@ function preloader() {
 
 function createObstacles() {
   if (gameArea.frameNo == 1 || ((gameArea.frameNo / 150) % 1 == 0)) {
-    obstaclesArray.push(new Obstacle(images[4], 1.5));
+    obstaclesArray.push(new Obstacle(images[4], 2));
   }
 }
 
@@ -74,24 +76,25 @@ function crash(runner, obstacle) {
   var runnerLeft = runner.x;
   var runnerRight = runner.x + (runner.frameWidth);
   var runnerTop = runner.y;
-  var runnerBottom = runner.y + (runner.frameHeight);
+  var runnerBottom = runner.y + runner.dy + (runner.frameHeight);
   var obstacleLeft = obstacle.x;
   var obstacleRight = obstacle.x + (obstacle.frameWidth);
   var obstacleTop = obstacle.y;
   var obstacleBottom = obstacle.y + (obstacle.frameHeight);
-  var crash = true;
-  if ((runnerBottom < obstacleTop) || (runnerTop > obstacleBottom) || (runnerRight < obstacleLeft) || (runnerLeft > obstacleRight)) {
-     crash = false;
+  if ((runnerRight < obstacleLeft) || (runnerLeft > obstacleRight) || (runnerBottom < obstacleTop)) {
+     return false;
   }
-  return crash;
+  return true;
 }
 
 function animate() {
-   window.requestAnimationFrame( animate );
+   myReq = window.requestAnimationFrame(animate);
 
-   if(crash(runner, obstacle)) {
-     gameArea.stop();
-   }
+   obstaclesArray.forEach((obstacle) => {
+     if(crash(runner, obstacle)) {
+       gameArea.stop();
+     }
+   });
 
    gameArea.context.clearRect(0, 0, gameArea.canvas.width, gameArea.canvas.height);
 
@@ -102,7 +105,13 @@ function animate() {
    runner.update();
    runner.draw();
 
-   obstacle.draw();
+   createObstacles();
+    obstaclesArray.forEach((obstacle) => {
+      // TODO: Dont forget to pop the obstacle of the array!!!!!!
+      obstacle.update();
+      obstacle.draw();
+    });
+
 
    score.update();
    gameArea.frameNo++;
@@ -113,9 +122,8 @@ function startGame() {
 
   skyline = new Background(images[2], 0.3, 0, 40);
   clouds = new Background(images[1], 0.6, 0, 40);
-  ground = new Background(images[0], 1, 0, 280);
+  ground = new Background(images[0], 2, 0, 280);
   runner = new Runner(images[3]);
-  obstacle = new Obstacle(images[4], 1);
   score = new Score();
 
   Background.prototype.context = gameArea.context;
