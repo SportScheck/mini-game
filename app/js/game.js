@@ -125,9 +125,16 @@ function animate() {
 
    createObstacles();
     obstaclesArray.forEach((obstacle) => {
-      // TODO: Dont forget to pop the obstacle of the array!!!!!!
       obstacle.update();
       obstacle.draw();
+
+      let obstacleNo = obstaclesArray.length;
+
+      if (obstacleNo > 5) {
+        for (i = 0; i < obstacleNo - 2; i++) {
+          obstaclesArray.splice(i);
+        }
+      }
     });
 
    score.update();
