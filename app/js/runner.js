@@ -4,7 +4,8 @@ const RUNNER_SPEED = 8;
 const JUMP_TIME = 130;
 
 class Runner {
-  constructor(image) {
+  constructor(image, level) {
+    this.level = level;
     this.image = image;
     this.frameWidth = RUNNER_WIDTH;
     this.frameHeight = RUNNER_HEIGHT;
@@ -14,6 +15,7 @@ class Runner {
     this.currentFrame = 0;
     this.counter = 0;
     this.jumpCounter = JUMP_TIME;
+    this.jumpTime = JUMP_TIME - level * 10;
     // this.gravity   = 1;
     this.dy        = 0;
     this.jumpDy    = -2;
@@ -22,6 +24,8 @@ class Runner {
     this.isCrashed = false;
     this.x = 60;
     this.y = 220;
+
+    this.increaseLevel = false;
 
     const self = this;
 
@@ -32,25 +36,40 @@ class Runner {
     });
   }
 
+  nextLevel(level) {
+    this.level = level;
+    this.increaseLevel = true;
+  }
+
+  updateLevel() {
+    console.log('update level', this.dy);
+    this.jumpTime = JUMP_TIME - this.level * 10;
+    this.jumpCounter = this.jumpTime;
+    this.jumpDy = -2 - (this.level * 0.2);
+  }
+
   jump() {
     if (this.isJumping) {
       this.dy += this.jumpDy;
       this.jumpCounter--;
+      console.log(this.jumpCounter, this.dy);
     }
 
     if (this.isFalling) {
       this.dy -= this.jumpDy;
       this.jumpCounter--;
+      console.log(this.jumpCounter, this.dy);
     }
 
-    if (this.jumpCounter === JUMP_TIME / 2) {
+    if (this.jumpCounter === this.jumpTime / 2) {
+      console.log(this.jumpCounter, this.jumpTime);
       this.isJumping = false;
       this.isFalling = true;
     }
 
     if (this.jumpCounter === 0) {
       this.isFalling = false;
-      this.jumpCounter = JUMP_TIME;
+      this.jumpCounter = this.jumpTime;
     }
   }
 
@@ -98,6 +117,16 @@ class Runner {
     this.isCrashed = true;
   }
 
+  reset() {
+    this.isCrashed = false;
+    this.isJumping = false;
+    this.isFalling = false;
+    this.dy        = 0;
+    this.currentFrame = 0;
+    this.counter = 0;
+    this.jumpCounter = this.jumpTime;
+  }
+
   draw() {
       // get the row and col of the frame
       const row = Math.floor(this.currentFrame / this.framesPerRow);
@@ -110,8 +139,11 @@ class Runner {
       } else if (this.isJumping || this.isFalling) {
         this.jumpingAnim(col, row, this.frameWidth, this.frameHeight, this.x, this.y);
       } else {
+        if (this.increaseLevel) {
+          this.updateLevel();
+          this.increaseLevel = false;
+        }
         this.runningAnim(col, row, this.frameWidth, this.frameHeight, this.x, this.y);
       }
-
   };
 }

@@ -1,5 +1,5 @@
 const OBSTACLE_HEIGHT = 60;
-const OBSTACLE_WIDTH = 72;
+const OBSTACLE_WIDTH = 52;
 const OBSTACLE_SPEED = 8;
 
 class Obstacle {

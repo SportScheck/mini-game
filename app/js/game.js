@@ -1,4 +1,10 @@
 let myReq;
+let isCrashed = false;
+let splashScreen = false;
+let initalStart = true;
+let level = 0;
+const GROUND_SPEED = 2;
+let obstacleSpeed = GROUND_SPEED;
 
 const gameArea = {
   canvas: document.getElementById('minigame'),
@@ -22,15 +28,22 @@ let runner;
 let score;
 let obstaclesArray = new Array();
 
+function endScreen() {
+  gameArea.context.font = '15px GameFont';
+  gameArea.context.fillStyle = 'black';
+  gameArea.context.textAlign = 'center';
+  gameArea.context.fillText('this.text', 300, 60);
+}
+
 function assetLoaded() {
   loadedAssets++;
   if (loadedAssets === totalAssets) {
-    splashScreen();
+    hideSplashscreen();
   }
 }
 
-function splashScreen() {
-  let splashScreen = true;
+function hideSplashscreen() {
+  splashScreen = true;
   window.addEventListener('keydown', function(e) {
     if(e.keyCode == 32 && splashScreen === true) {
       document.getElementById('splashScreen').style.display = 'none';
@@ -67,8 +80,11 @@ function preloader() {
 }
 
 function createObstacles() {
-  if (gameArea.frameNo == 1 || ((gameArea.frameNo / 150) % 1 == 0)) {
-    obstaclesArray.push(new Obstacle(images[4], 2));
+  if (gameArea.frameNo == 1 || (gameArea.frameNo / 150 % 1 == 0)) {
+    const randomFactor = Math.floor(Math.random() * (100 - 1) + 1);
+    if (randomFactor % 2 === 0) {
+      obstaclesArray.push(new Obstacle(images[4], obstacleSpeed, 600 + randomFactor));
+    }
   }
 }
 
@@ -82,29 +98,28 @@ function crash(runner, obstacle) {
   var obstacleTop = obstacle.y;
   var obstacleBottom = obstacle.y + (obstacle.frameHeight);
   if ((runnerRight < obstacleLeft) || (runnerLeft > obstacleRight) || (runnerBottom < obstacleTop)) {
-     return false;
+     return;
   }
-  return true;
+  isCrashed = true;
 }
 
 function animate() {
    myReq = window.requestAnimationFrame(animate);
 
+   gameArea.context.clearRect(0, 0, gameArea.canvas.width, gameArea.canvas.height);
+
    obstaclesArray.forEach((obstacle) => {
-     if(crash(runner, obstacle)) {
-       runner.crash();
-       runner.update();
-       runner.draw();
-       gameArea.stop();
-     }
+     crash(runner, obstacle);
    });
 
-   gameArea.context.clearRect(0, 0, gameArea.canvas.width, gameArea.canvas.height);
 
    skyline.draw();
    clouds.draw();
    ground.draw();
 
+   if (isCrashed) {
+     runner.crash();
+   }
    runner.update();
    runner.draw();
 
@@ -115,23 +130,45 @@ function animate() {
       obstacle.draw();
     });
 
-
    score.update();
+
+   if (isCrashed) {
+     score.done();
+     gameArea.stop();
+     splashScreen = true;
+   }
+
    gameArea.frameNo++;
+   if (gameArea.frameNo % 500 === 0) {
+     nextLevel();
+   }
+}
+
+function nextLevel() {
+  level += 1;
+  runner.nextLevel(level);
+  ground.speed = GROUND_SPEED + level / 2;
+  obstacleSpeed = GROUND_SPEED + level / 2;
 }
 
 function startGame() {
-  gameArea.start();
+  if (initalStart) {
+    initalStart = false;
 
-  skyline = new Background(images[2], 0.3, 0, 40);
-  clouds = new Background(images[1], 0.6, 0, 40);
-  ground = new Background(images[0], 2, 0, 280);
-  runner = new Runner(images[3]);
-  score = new Score();
+    gameArea.start();
 
-  Background.prototype.context = gameArea.context;
-	Background.prototype.canvasWidth = gameArea.width;
-	Background.prototype.canvasHeight = gameArea.height;
+    skyline = new Background(images[2], 0.3, 0, 40);
+    clouds = new Background(images[1], 0.6, 0, 40);
+    ground = new Background(images[0], GROUND_SPEED, 0, 280);
+    runner = new Runner(images[3], level);
+    score = new Score();
+  } else {
+    gameArea.frameNo = 0;
+    obstaclesArray = [];
+    isCrashed = false;
+    level = 0;
+    runner.reset();
+  }
 
   animate();
 }
