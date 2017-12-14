@@ -34,6 +34,11 @@ class Runner {
         self.isJumping = true;
       }
     });
+    window.addEventListener('touchstart', function(e) {
+      if(!self.isFalling) {
+        self.isJumping = true;
+      }
+    });
   }
 
   nextLevel(level) {

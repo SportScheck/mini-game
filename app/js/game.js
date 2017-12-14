@@ -37,21 +37,27 @@ function endScreen() {
 
 function assetLoaded() {
   loadedAssets++;
+  splashScreen = true;
   if (loadedAssets === totalAssets) {
-    hideSplashscreen();
+    window.addEventListener('keydown', e => {
+      console.log(e.keyCode);
+      if(e.keyCode == 32) {
+        hideSplashscreen(splashScreen);
+      }
+    });
+    window.addEventListener('touchstart', hideSplashscreen);
   }
 }
 
-function hideSplashscreen() {
-  splashScreen = true;
-  window.addEventListener('keydown', function(e) {
-    if(e.keyCode == 32 && splashScreen === true) {
-      document.getElementById('splashScreen').style.display = 'none';
-      document.getElementById('minigame').style.display = 'block';
-      splashScreen = false;
-      startGame();
-    }
-  });
+function hideSplashscreen(e) {
+
+  if(splashScreen === true) {
+    document.getElementById('splashScreen').style.display = 'none';
+    document.getElementById('minigame').style.display = 'block';
+    splashScreen = false;
+    startGame();
+  }
+
 }
 
 function preloader() {
