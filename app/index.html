@@ -10,9 +10,22 @@
     font-family: 'GameFont';
     src: url('./assets/font.ttf');
   }
+
+  #splashScreen {
+    background-image: url('https://i.pinimg.com/originals/ca/5c/ef/ca5cef669ae00e7e67ffe1a9e543aff0.png');
+    background-size: cover;
+    width: 600px;
+    height: 300px;
+  }
+
+  #minigame {
+    display: none;
+  }
   </style>
 
   <body>
+    <div id='splashScreen'></div>
+
     <canvas id="minigame" width="600" height="300"></canvas>
 
     <!--build:js js/main.min.js -->
