@@ -12,7 +12,7 @@ class Obstacle {
     this.framesPerRow = Math.floor(this.image.width / this.frameWidth);
     this.currentFrame = 0;
     this.counter = 0;
-		this.x = 610;
+		this.x = 600;
 		this.y = 230;
 		this.speed = speed; // Redefine speed of the background for panning
 	}

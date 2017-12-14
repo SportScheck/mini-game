@@ -8,7 +8,10 @@ let obstacleSpeed = GROUND_SPEED;
 
 const gameArea = {
   canvas: document.getElementById('minigame'),
+  prestart: function() {
+  },
   start: function() {
+    setCanvasWidth('initial');
     this.context = this.canvas.getContext('2d');
     this.frameNo = 0;
   },
@@ -16,6 +19,37 @@ const gameArea = {
     window.cancelAnimationFrame(myReq);
   }
 }
+
+function setCanvasWidth(type) {
+  const clientWidth = document.getElementsByClassName('minigame-container')[0].clientWidth;
+  const maxWidth = 600;
+  const newCanvasWidth = clientWidth < maxWidth ? clientWidth : maxWidth;
+
+  gameArea.canvas.width = newCanvasWidth;
+  gameArea.x = newCanvasWidth;
+  gameArea.canvas.height = 400;
+  gameArea.y = 400;
+
+  if (type === 'resize') {
+    score.x = newCanvasWidth / 2;
+  }
+}
+
+function debounce(func, wait, immediate) {
+	let timeout;
+	return function() {
+		let context = this;
+    let args = arguments;
+		let later = function() {
+			timeout = null;
+			if (!immediate) func.apply(context, args);
+		};
+		let callNow = immediate && !timeout;
+		clearTimeout(timeout);
+		timeout = setTimeout(later, wait);
+		if (callNow) func.apply(context, args);
+	};
+};
 
 let totalAssets = 0;
 let loadedAssets = 0;
@@ -40,12 +74,18 @@ function assetLoaded() {
   splashScreen = true;
   if (loadedAssets === totalAssets) {
     window.addEventListener('keydown', e => {
-      console.log(e.keyCode);
       if(e.keyCode == 32) {
         hideSplashscreen(splashScreen);
       }
     });
     window.addEventListener('touchstart', hideSplashscreen);
+
+    let myEfficientFn = debounce(function() {
+    	setCanvasWidth('resize');
+      window.cancelAnimationFrame(myReq);
+      animate();
+    }, 250);
+    window.addEventListener('resize', myEfficientFn);
   }
 }
 

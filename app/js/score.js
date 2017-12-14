@@ -1,6 +1,6 @@
 const SCORE_FONT = 'GameFont';
-const SCORE_SIZE = 20;
-const HEADLINE_SIZE = 50;
+const SCORE_SIZE = 2;
+const HEADLINE_SIZE = 5;
 const SPACE = 40;
 
 class Score {
@@ -12,7 +12,7 @@ class Score {
      this.color = 'black';
      this.distance = 0;
      this.calories = 0;
-     this.x = 300;
+     this.x = gameArea.x / 2;
      this.y = 40;
    }
 
@@ -23,7 +23,7 @@ class Score {
 
     const text = 'Gelaufene Strecke: ' + this.distance + 'm ';
 
-    ctx.font = this.size + 'px' + ' ' + this.font;
+    ctx.font = this.size + 'rem' + ' ' + this.font;
     ctx.fillStyle = this.color;
     ctx.textAlign="center";
     ctx.fillText(text, this.x, this.y);
@@ -35,7 +35,7 @@ class Score {
     this.calories = parseInt((gameArea.frameNo / 50) * 0.2);
 
     // text blocks
-    const text = 'Game Over';
+    const text = 'G a m e  O v e r';
     const text2 = 'Du hast ' + this.calories + ' kcal verbrannt!';
     const text3 = 'Starten & Springen';
     const text4 = 'mit Leertaste'
@@ -51,11 +51,11 @@ class Score {
     ctx.textAlign = 'center';
 
     // define size and set headline on canvas
-    ctx.font = this.headlineSize + 'px' + ' ' + this.font;
+    ctx.font = this.headlineSize + 'rem' + ' ' + this.font;
     ctx.fillText(text, this.x, positionYText);
 
     // define size and set text on canvas
-    ctx.font = this.size + 'px' + ' ' + this.font;
+    ctx.font = this.size + 'rem' + ' ' + this.font;
     ctx.fillText(text2, this.x, positionYText2);
     ctx.fillText(text3, this.x, positionYText3);
     ctx.fillText(text4, this.x, positionYText4);

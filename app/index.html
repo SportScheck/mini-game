@@ -2,6 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Mini Game</title>
   </head>
 
@@ -9,6 +10,10 @@
   @font-face {
     font-family: 'GameFont';
     src: url('./assets/font.ttf');
+  }
+
+  html {
+    font-size: 58.59375%;
   }
 
   #splashScreen {
@@ -25,15 +30,15 @@
   @media (orientation: landscape) {
     #splashScreen {
       background-image: url('./assets/game_startscreen.png');
-      background-size: cover;
-      width: 800px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      max-width: 600px;
+      width: 100%;
       height: 400px;
     }
 
     #minigame {
       display: none;
-      width: 800px;
-      height: 400px;
     }
   }
 
@@ -42,7 +47,9 @@
   <body>
     <div id='splashScreen'></div>
 
-    <canvas id='minigame' width='600' height='300'></canvas>
+    <div class="minigame-container">
+      <canvas id='minigame'></canvas>
+    </div>
 
     <!--build:js js/main.min.js -->
     <script src="js/background.js" charset="utf-8"></script>
