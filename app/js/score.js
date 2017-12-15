@@ -1,4 +1,4 @@
-const SCORE_FONT = 'GameFont';
+const SCORE_FONT = 'SPSMinigameFont';
 const SCORE_SIZE = 2;
 const HEADLINE_SIZE = 5;
 const SPACE = 40;

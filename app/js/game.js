@@ -100,6 +100,20 @@ function hideSplashscreen(e) {
 
 }
 
+function loadFont(){
+  let head = document.getElementsByTagName('head')[0];
+
+  let newStyle = document.createElement('style');
+  newStyle.appendChild(document.createTextNode("\
+  @font-face {\
+      font-family: 'SPSMinigameFont';\
+      src: url('./assets/font.ttf');\
+  }\
+  "));
+
+  document.head.appendChild(newStyle);
+}
+
 function preloader() {
   // counter
   var i = 0;
@@ -107,11 +121,11 @@ function preloader() {
   imageObj = new Image();
   // set image list
   urls = new Array();
-  urls[0] = './assets/ground.png';
-  urls[1] = './assets/clouds.png';
-  urls[2] = './assets/skyline.png';
-  urls[3] = './assets/runner_sprite.png';
-  urls[4] = './assets/fire_sprite.png';
+  urls[0] = 'http://i1.adis.ws/i/sportscheck/minigame_ground';
+  urls[1] = 'http://i1.adis.ws/i/sportscheck/minigame_clouds';
+  urls[2] = 'http://i1.adis.ws/i/sportscheck/minigame_skyline';
+  urls[3] = 'http://i1.adis.ws/i/sportscheck/minigame_runner_sprite';
+  urls[4] = 'http://i1.adis.ws/i/sportscheck/minigame_fire_sprite';
 
   totalAssets = urls.length;
 
@@ -123,6 +137,8 @@ function preloader() {
     }
     images[i].src = urls[i];
   }
+
+  loadFont();
 }
 
 function createObstacles() {
