@@ -90,14 +90,15 @@ function assetLoaded() {
 }
 
 function hideSplashscreen(e) {
-
-  if(splashScreen === true) {
+  if(document.getElementById('splashScreen')) {
     document.getElementById('splashScreen').style.display = 'none';
     document.getElementById('minigame').style.display = 'block';
+  }
+
+  if(splashScreen === true) {
     splashScreen = false;
     startGame();
   }
-
 }
 
 function loadFont(){

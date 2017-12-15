@@ -1,6 +1,6 @@
 const SCORE_FONT = '"Press Start 2P"';
-const SCORE_SIZE = 2;
-const HEADLINE_SIZE = 5;
+const SCORE_SIZE = 1.3;
+const HEADLINE_SIZE = 3;
 const SPACE = 40;
 
 class Score {
