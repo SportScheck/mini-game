@@ -118,10 +118,8 @@ function loadFont(){
 function preloader() {
   // counter
   var i = 0;
-  // create object
-  imageObj = new Image();
   // set image list
-  urls = new Array();
+  let urls = new Array();
   urls[0] = 'http://i1.adis.ws/i/sportscheck/minigame_ground';
   urls[1] = 'http://i1.adis.ws/i/sportscheck/minigame_clouds';
   urls[2] = 'http://i1.adis.ws/i/sportscheck/minigame_skyline';
@@ -141,8 +139,6 @@ function preloader() {
 
   loadFont();
 }
-
-
 
 function crash(runner, obstacle) {
   var runnerLeft = runner.x;

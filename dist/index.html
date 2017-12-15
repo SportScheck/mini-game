@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Mini Game</title>
+  </head>
+
+  <style>
+
+  html {
+    font-size: 58.59375%;
+  }
+
+  #splashScreen {
+    background-image: url('http://i1.adis.ws/i/sportscheck/minigame_game_startscreen');
+    background-size: cover;
+    width: 600px;
+    height: 250px;
+  }
+
+  #minigame {
+    display: none;
+  }
+
+  @media (orientation: landscape) {
+    #splashScreen {
+      background-image: url('http://i1.adis.ws/i/sportscheck/minigame_game_startscreen');
+      background-size: contain;
+      background-repeat: no-repeat;
+      max-width: 600px;
+      width: 100%;
+      height: 400px;
+    }
+
+    #minigame {
+      display: none;
+    }
+  }
+
+  </style>
+
+  <body>
+    <div id='splashScreen'></div>
+
+    <div class="minigame-container">
+      <canvas id='minigame'></canvas>
+    </div>
+
+    <script src="js/main.min.js"></script>
+  </body>
+</html>

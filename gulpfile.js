@@ -1,16 +1,11 @@
 var gulp = require('gulp');
 var useref = require('gulp-useref');
-var uglify = require('gulp-uglify-es').default;
 var gulpIf = require('gulp-if');
 var browserSync = require('browser-sync').create();
 
 gulp.task('useref', function(){
   return gulp.src('app/*.html')
     .pipe(useref())
-    // Minifies only if it's a JavaScript file
-    .pipe(gulpIf('*.js', uglify().on('error', function(e){
-            console.log(e);
-         })))
     .pipe(gulp.dest('dist'))
 });
 
