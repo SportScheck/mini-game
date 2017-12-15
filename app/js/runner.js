@@ -17,7 +17,6 @@ class Runner {
     this.jumpCounter = JUMP_TIME;
     this.jumpTime = JUMP_TIME;
     this.dy        = 0;
-    this.jumpDy    = -2;
     this.isFalling = false;
     this.isJumping = false;
     this.isCrashed = false;
@@ -48,7 +47,6 @@ class Runner {
   updateLevel() {
     this.jumpTime = JUMP_TIME - this.level * 10;
     this.jumpCounter = this.jumpTime;
-    this.jumpDy = -2 - (this.level * 0.2);
   }
 
   jump() {
@@ -119,7 +117,6 @@ class Runner {
     this.isJumping = false;
     this.isFalling = false;
     this.dy        = 0;
-    this.jumpDy    = -2;
     this.currentFrame = 0;
     this.counter = 0;
     this.jumpTime = JUMP_TIME - level * 15;
