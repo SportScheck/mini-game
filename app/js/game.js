@@ -103,13 +103,9 @@ function hideSplashscreen(e) {
 function loadFont(){
   let head = document.getElementsByTagName('head')[0];
 
-  let newStyle = document.createElement('style');
-  newStyle.appendChild(document.createTextNode("\
-  @font-face {\
-      font-family: 'SPSMinigameFont';\
-      src: url('./assets/font.ttf');\
-  }\
-  "));
+  let newStyle = document.createElement('link');
+  newStyle.href = 'https://fonts.googleapis.com/css?family=Press+Start+2P';
+  newStyle.rel = 'stylesheet';
 
   document.head.appendChild(newStyle);
 }

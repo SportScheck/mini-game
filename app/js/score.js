@@ -1,4 +1,4 @@
-const SCORE_FONT = 'SPSMinigameFont';
+const SCORE_FONT = '"Press Start 2P"';
 const SCORE_SIZE = 2;
 const HEADLINE_SIZE = 5;
 const SPACE = 40;
