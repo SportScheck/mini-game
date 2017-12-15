@@ -1,13 +1,13 @@
 const SCORE_FONT = '"Press Start 2P"';
-const SCORE_SIZE = 1.3;
-const HEADLINE_SIZE = 3;
+const SCORE_SIZE = 0.003;
+const HEADLINE_SIZE = 0.006;
 const SPACE = 40;
 
 class Score {
   constructor() {
      this.font = SCORE_FONT;
-     this.size = SCORE_SIZE;
-     this.headlineSize = HEADLINE_SIZE;
+     this.size = SCORE_SIZE * window.innerWidth;
+     this.headlineSize = HEADLINE_SIZE * window.innerWidth;
      this.speed = 3;
      this.color = 'black';
      this.distance = 0;
@@ -41,10 +41,10 @@ class Score {
     const text4 = 'mit Leertaste'
 
     // text positions
-    const positionYText = SPACE * 3;
-    const positionYText2 = SPACE * 4;
-    const positionYText3 = SPACE * 5;
-    const positionYText4 = SPACE * 5.5;
+    const positionYText = SPACE * 2.5;
+    const positionYText2 = SPACE * 3.5;
+    const positionYText3 = SPACE * 4.5;
+    const positionYText4 = SPACE * 5;
 
     // general text style
     ctx.fillStyle = this.color;
