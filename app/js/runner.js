@@ -1,7 +1,7 @@
 const RUNNER_HEIGHT = 72;
 const RUNNER_WIDTH = 40;
 const RUNNER_SPEED = 8;
-const JUMP_TIME = 100;
+const JUMP_TIME = 130;
 
 class Runner {
   constructor(image, level) {
@@ -15,7 +15,7 @@ class Runner {
     this.currentFrame = 0;
     this.counter = 0;
     this.jumpCounter = JUMP_TIME;
-    this.jumpTime = JUMP_TIME; //- level * 10;
+    this.jumpTime = JUMP_TIME;
     this.dy        = 0;
     this.jumpDy    = -2;
     this.isFalling = false;
@@ -46,8 +46,8 @@ class Runner {
   }
 
   updateLevel() {
-    // this.jumpTime = JUMP_TIME - this.level * 10;
-    // this.jumpCounter = this.jumpTime;
+    this.jumpTime = JUMP_TIME - this.level * 10;
+    this.jumpCounter = this.jumpTime;
     this.jumpDy = -2 - (this.level * 0.2);
   }
 
@@ -122,7 +122,7 @@ class Runner {
     this.jumpDy    = -2;
     this.currentFrame = 0;
     this.counter = 0;
-    this.jumpTime = JUMP_TIME - level * 10;
+    this.jumpTime = JUMP_TIME - level * 15;
     this.jumpCounter = this.jumpTime;
   }
 
@@ -147,8 +147,8 @@ class Runner {
   };
 
   calculateHeightChange(time) {
-    let oldHeight = - 0.05 * Math.pow((time - this.jumpTime / 2), 2);
-    let newHeight = - 0.05 * Math.pow((time + 1 - this.jumpTime / 2), 2);
+    let oldHeight = - 450 * Math.pow((time/this.jumpTime - 0.5), 2);
+    let newHeight = - 450 * Math.pow(((time + 1)/this.jumpTime - 0.5), 2);
     return newHeight - oldHeight;
   }
 }
