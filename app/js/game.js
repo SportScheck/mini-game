@@ -14,6 +14,7 @@ const gameArea = {
     setCanvasWidth('initial');
     this.context = this.canvas.getContext('2d');
     this.frameNo = 0;
+    this.canvas.classList.add('minigame--started');
   },
   stop: function() {
     window.cancelAnimationFrame(myReq);
@@ -27,8 +28,8 @@ function setCanvasWidth(type) {
 
   gameArea.canvas.width = newCanvasWidth;
   gameArea.x = newCanvasWidth;
-  gameArea.canvas.height = 400;
-  gameArea.y = 400;
+  gameArea.canvas.height = 300;
+  gameArea.y = 300;
 
   if (type === 'resize') {
     score.x = newCanvasWidth / 2;
@@ -93,11 +94,11 @@ function assetLoaded() {
 function hideSplashscreen(e) {
   if(document.getElementById('splashScreen')) {
     document.getElementById('splashScreen').style.display = 'none';
-    document.getElementById('minigame').style.display = 'block';
   }
 
   if(splashScreen === true) {
     splashScreen = false;
+    document.getElementById('minigame').style.display = 'block';
     startGame();
   }
 }
