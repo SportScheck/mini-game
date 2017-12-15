@@ -33,6 +33,8 @@ function setCanvasWidth(type) {
 
   if (type === 'resize') {
     score.x = newCanvasWidth / 2;
+    score.size = SCORE_SIZE * (score.x * 2);
+    score.headlineSize = HEADLINE_SIZE * (score.x * 2);
   }
 }
 

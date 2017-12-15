@@ -6,8 +6,8 @@ const SPACE = 40;
 class Score {
   constructor() {
      this.font = SCORE_FONT;
-     this.size = SCORE_SIZE * window.innerWidth;
-     this.headlineSize = HEADLINE_SIZE * window.innerWidth;
+     this.size = SCORE_SIZE * gameArea.x;
+     this.headlineSize = HEADLINE_SIZE * gameArea.x;
      this.speed = 3;
      this.color = 'black';
      this.distance = 0;
@@ -35,7 +35,7 @@ class Score {
     this.calories = parseInt((gameArea.frameNo / 50) * 0.2);
 
     // text blocks
-    const text = 'G a m e  O v e r';
+    const text = 'G A M E  O V E R';
     const text2 = 'Du hast ' + this.calories + ' kcal verbrannt!';
     const text3 = 'Starten & Springen';
     const text4 = 'mit Leertaste'
