@@ -21,7 +21,7 @@ class Score {
 
     this.distance = parseInt((gameArea.frameNo / 50) * this.speed);
 
-    const text = 'Gelaufene Strecke: ' + this.distance + 'm ';
+    const text = 'GELAUFENE STRECKE: ' + this.distance + 'M';
 
     ctx.font = this.size + 'rem' + ' ' + this.font;
     ctx.fillStyle = this.color;
@@ -36,9 +36,9 @@ class Score {
 
     // text blocks
     const text = 'G A M E  O V E R';
-    const text2 = 'Du hast ' + this.calories + ' kcal verbrannt!';
-    const text3 = 'Starten & Springen';
-    const text4 = 'mit Leertaste'
+    const text2 = 'DU HAST ' + this.calories + ' KCAL VERBRANNT!';
+    const text3 = 'STARTEN & SPRINGEN MIT';
+    const text4 = 'LEERTASTE ODER KLICK'
 
     // text positions
     const positionYText = SPACE * 2.5;

@@ -82,7 +82,11 @@ function assetLoaded() {
         hideSplashscreen(splashScreen);
       }
     });
-    window.addEventListener('touchstart', hideSplashscreen);
+
+    const canvasElement = document.querySelector('#minigame');
+
+    canvasElement.addEventListener('touchstart', hideSplashscreen);
+    canvasElement.addEventListener('click', hideSplashscreen);
 
     let myEfficientFn = debounce(function() {
     	setCanvasWidth('resize');

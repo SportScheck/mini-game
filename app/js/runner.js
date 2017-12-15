@@ -27,12 +27,19 @@ class Runner {
 
     const self = this;
 
+    const canvasElement = document.querySelector('#minigame');
+
     window.addEventListener('keydown', function(e) {
       if (e.keyCode === 32 && !self.isFalling) {
         self.isJumping = true;
       }
     });
-    window.addEventListener('touchstart', function(e) {
+    canvasElement.addEventListener('click', function(e) {
+      if(!self.isFalling) {
+        self.isJumping = true;
+      }
+    });
+    canvasElement.addEventListener('touchstart', function(e) {
       if(!self.isFalling) {
         self.isJumping = true;
       }
