@@ -125,14 +125,7 @@ function preloader() {
   }
 }
 
-function createObstacles() {
-  if (gameArea.frameNo == 1 || (gameArea.frameNo / 130 % 1 == 0)) {
-    const randomFactor = Math.floor(Math.random() * (100 - 1) + 1);
-    if (randomFactor % 2 === 0) {
-      obstaclesArray.push(new Obstacle(images[4], obstacleSpeed, 600 + randomFactor));
-    }
-  }
-}
+
 
 function crash(runner, obstacle) {
   var runnerLeft = runner.x;
@@ -170,18 +163,19 @@ function animate() {
    runner.draw();
 
    createObstacles();
-    obstaclesArray.forEach((obstacle) => {
-      obstacle.update();
-      obstacle.draw();
 
-      let obstacleNo = obstaclesArray.length;
+   obstaclesArray.forEach((obstacle) => {
+     obstacle.update();
+     obstacle.draw();
 
-      if (obstacleNo > 5) {
-        for (i = 0; i < obstacleNo - 2; i++) {
-          obstaclesArray.shift();
-        }
-      }
-    });
+     let obstacleNo = obstaclesArray.length;
+
+     if (obstacleNo > 5) {
+       for (i = 0; i < obstacleNo - 2; i++) {
+         obstaclesArray.shift();
+       }
+     }
+   });
 
    score.update();
 
@@ -199,6 +193,15 @@ function animate() {
    if (gameArea.frameNo % 500 === 0) {
      nextLevel();
    }
+}
+
+function createObstacles() {
+  if (gameArea.frameNo == 1 || (gameArea.frameNo / 130 % 1 == 0)) {
+    const randomFactor = Math.floor(Math.random() * (100 - 1) + 1);
+    if (randomFactor % 2 === 0) {
+      obstaclesArray.push(new Obstacle(images[4], obstacleSpeed, 600 + randomFactor));
+    }
+  }
 }
 
 function updateSpeed(obstacles, newSpeed) {

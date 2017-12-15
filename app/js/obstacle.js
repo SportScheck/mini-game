@@ -42,6 +42,5 @@ class Obstacle {
        this.frameWidth, this.frameHeight,
        this.x, this.y,
        this.frameWidth, this.frameHeight);
-    gameArea.context.strokeRect(this.x, this.y, this.frameWidth, this.frameHeight);
 	}
 }

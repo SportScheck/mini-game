@@ -1,7 +1,7 @@
 const RUNNER_HEIGHT = 72;
 const RUNNER_WIDTH = 40;
 const RUNNER_SPEED = 8;
-const JUMP_TIME = 130;
+const JUMP_TIME = 100;
 
 class Runner {
   constructor(image, level) {
@@ -15,8 +15,7 @@ class Runner {
     this.currentFrame = 0;
     this.counter = 0;
     this.jumpCounter = JUMP_TIME;
-    this.jumpTime = JUMP_TIME - level * 10;
-    // this.gravity   = 1;
+    this.jumpTime = JUMP_TIME; //- level * 10;
     this.dy        = 0;
     this.jumpDy    = -2;
     this.isFalling = false;
@@ -47,27 +46,23 @@ class Runner {
   }
 
   updateLevel() {
-    // console.log('update level', this.dy);
-    this.jumpTime = JUMP_TIME - this.level * 10;
-    this.jumpCounter = this.jumpTime;
+    // this.jumpTime = JUMP_TIME - this.level * 10;
+    // this.jumpCounter = this.jumpTime;
     this.jumpDy = -2 - (this.level * 0.2);
   }
 
   jump() {
     if (this.isJumping) {
-      this.dy += this.jumpDy;
+      this.dy -= this.calculateHeightChange(this.jumpTime - this.jumpCounter);
       this.jumpCounter--;
-      // console.log(this.jumpCounter, this.dy);
     }
 
     if (this.isFalling) {
-      this.dy -= this.jumpDy;
+      this.dy -= this.calculateHeightChange(this.jumpTime - this.jumpCounter);
       this.jumpCounter--;
-      // console.log(this.jumpCounter, this.dy);
     }
 
     if (this.jumpCounter === this.jumpTime / 2) {
-      // console.log(this.jumpCounter, this.jumpTime);
       this.isJumping = false;
       this.isFalling = true;
     }
@@ -95,7 +90,6 @@ class Runner {
        frameWidth, frameHeight,
        x, y + this.dy,
        frameWidth, frameHeight);
-    gameArea.context.strokeRect(x, y + this.dy, frameWidth, frameHeight);
   };
 
   jumpingAnim(col, row, frameWidth, frameHeight, x, y) {
@@ -105,7 +99,6 @@ class Runner {
        frameWidth, frameHeight,
        x, y + this.dy,
        frameWidth, frameHeight);
-    gameArea.context.strokeRect(x, y + this.dy, frameWidth, frameHeight);
   };
 
   crashAnim(col, row, frameWidth, frameHeight, x, y) {
@@ -115,7 +108,6 @@ class Runner {
        frameWidth, frameHeight,
        x, y + this.dy,
        frameWidth, frameHeight);
-    gameArea.context.strokeRect(x, y + this.dy, frameWidth, frameHeight);
   };
 
   crash() {
@@ -153,4 +145,10 @@ class Runner {
         this.runningAnim(col, row, this.frameWidth, this.frameHeight, this.x, this.y);
       }
   };
+
+  calculateHeightChange(time) {
+    let oldHeight = - 0.05 * Math.pow((time - this.jumpTime / 2), 2);
+    let newHeight = - 0.05 * Math.pow((time + 1 - this.jumpTime / 2), 2);
+    return newHeight - oldHeight;
+  }
 }
