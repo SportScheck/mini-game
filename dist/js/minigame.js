@@ -167,22 +167,11 @@ var MiniGame = function () {
 
         canvasElement.addEventListener('touchstart', this._hideSplashscreen);
         canvasElement.addEventListener('click', this._hideSplashscreen);
-
-        var myEfficientFn = this._debounce(function () {
-          this._setCanvasWidth('resize');
-          window.cancelAnimationFrame(this.myReq);
-          this._animate();
-        }.bind(this), 250);
-        window.addEventListener('resize', myEfficientFn);
       }
     }
   }, {
     key: '_hideSplashscreen',
     value: function _hideSplashscreen(e) {
-      if (document.getElementById('splashScreen')) {
-        document.getElementById('splashScreen').style.display = 'none';
-      }
-
       if (this.splashScreen === true) {
         this.splashScreen = false;
         document.getElementById('minigame').style.display = 'block';
@@ -272,7 +261,7 @@ var MiniGame = function () {
 
         var obstacleNo = _this3.obstaclesArray.length;
 
-        if (obstacleNo > 5) {
+        if (obstacleNo > 6) {
           var i = 0;
 
           while (i < obstacleNo - 2) {
@@ -345,6 +334,13 @@ var MiniGame = function () {
         this.level = 0;
         this.runner.reset();
       }
+
+      var myEfficientFn = this._debounce(function () {
+        this._setCanvasWidth('resize');
+        window.cancelAnimationFrame(this.myReq);
+        this._animate();
+      }.bind(this), 250);
+      window.addEventListener('resize', myEfficientFn);
 
       this._animate();
     }
