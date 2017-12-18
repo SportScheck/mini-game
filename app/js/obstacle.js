@@ -3,7 +3,8 @@ const OBSTACLE_WIDTH = 52;
 const OBSTACLE_SPEED = 8;
 
 class Obstacle {
-	constructor(image, speed) {
+	constructor(gameArea, image, speed) {
+		this.gameArea = gameArea;
     this.image = image;
     this.frameWidth = OBSTACLE_WIDTH;
     this.frameHeight = OBSTACLE_HEIGHT;
@@ -14,7 +15,7 @@ class Obstacle {
     this.counter = 0;
 		this.x = 600;
 		this.y = 230;
-		this.speed = speed; // Redefine speed of the background for panning
+		this.speed = speed;
 	}
 
   update() {
@@ -36,7 +37,7 @@ class Obstacle {
     const row = Math.floor(this.currentFrame / this.framesPerRow);
     const col = Math.floor(this.currentFrame % this.framesPerRow);
 
-    gameArea.context.drawImage(
+    this.gameArea.context.drawImage(
        this.image,
        col * this.frameWidth, row * this.frameHeight,
        this.frameWidth, this.frameHeight,
@@ -44,3 +45,5 @@ class Obstacle {
        this.frameWidth, this.frameHeight);
 	}
 }
+
+module.exports = Obstacle;

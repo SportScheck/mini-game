@@ -41,18 +41,15 @@
   </style>
 
   <body>
-    <div id='splashScreen'></div>
+    <div id="splashScreen"></div>
 
     <div class="minigame-container">
       <canvas id='minigame'></canvas>
     </div>
 
-    <!--build:js js/main.min.js -->
-    <script src="js/background.js" charset="utf-8"></script>
-    <script src="js/runner.js" charset="utf-8"></script>
-    <script src="js/obstacle.js" charset="utf-8"></script>
-    <script src="js/score.js" charset="utf-8"></script>
-    <script src="js/game.js" charset="utf-8"></script>
-    <!-- endbuild -->
+    <script src="js/bundle.js" charset="utf-8"></script>
+    <script type="text/javascript">
+      new MiniGame();
+    </script>
   </body>
 </html>

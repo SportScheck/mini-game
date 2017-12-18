@@ -4,22 +4,23 @@ const HEADLINE_SIZE = 0.006;
 const SPACE = 40;
 
 class Score {
-  constructor() {
+  constructor(gameArea) {
+     this.gameArea = gameArea;
      this.font = SCORE_FONT;
-     this.size = SCORE_SIZE * gameArea.x;
-     this.headlineSize = HEADLINE_SIZE * gameArea.x;
+     this.size = SCORE_SIZE * this.gameArea.x;
+     this.headlineSize = HEADLINE_SIZE * this.gameArea.x;
      this.speed = 3;
      this.color = 'black';
      this.distance = 0;
      this.calories = 0;
-     this.x = gameArea.x / 2;
+     this.x = this.gameArea.x / 2;
      this.y = 40;
    }
 
   update() {
-    const ctx = gameArea.context;
+    const ctx = this.gameArea.context;
 
-    this.distance = parseInt((gameArea.frameNo / 50) * this.speed);
+    this.distance = parseInt((this.gameArea.frameNo / 50) * this.speed);
 
     const text = 'GELAUFENE STRECKE: ' + this.distance + 'M';
 
@@ -30,9 +31,9 @@ class Score {
   }
 
   done() {
-    const ctx = gameArea.context;
+    const ctx = this.gameArea.context;
 
-    this.calories = parseInt((gameArea.frameNo / 50) * 0.2);
+    this.calories = parseInt((this.gameArea.frameNo / 50) * 0.2);
 
     // text blocks
     const text = 'G A M E  O V E R';
@@ -61,3 +62,5 @@ class Score {
     ctx.fillText(text4, this.x, positionYText4);
   }
 }
+
+module.exports = Score;

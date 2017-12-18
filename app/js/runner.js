@@ -4,7 +4,8 @@ const RUNNER_SPEED = 8;
 const JUMP_TIME = 130;
 
 class Runner {
-  constructor(image, level) {
+  constructor(gameArea, image, level) {
+    this.gameArea = gameArea;
     this.level = level;
     this.image = image;
     this.frameWidth = RUNNER_WIDTH;
@@ -16,7 +17,7 @@ class Runner {
     this.counter = 0;
     this.jumpCounter = JUMP_TIME;
     this.jumpTime = JUMP_TIME;
-    this.dy        = 0;
+    this.dy = 0;
     this.isFalling = false;
     this.isJumping = false;
     this.isCrashed = false;
@@ -89,7 +90,7 @@ class Runner {
   };
 
   runningAnim(col, row, frameWidth, frameHeight, x, y) {
-    gameArea.context.drawImage(
+    this.gameArea.context.drawImage(
        this.image,
        col * frameWidth, row * frameHeight,
        frameWidth, frameHeight,
@@ -98,7 +99,7 @@ class Runner {
   };
 
   jumpingAnim(col, row, frameWidth, frameHeight, x, y) {
-    gameArea.context.drawImage(
+    this.gameArea.context.drawImage(
        this.image,
        frameWidth, 0,
        frameWidth, frameHeight,
@@ -107,7 +108,7 @@ class Runner {
   };
 
   crashAnim(col, row, frameWidth, frameHeight, x, y) {
-    gameArea.context.drawImage(
+    this.gameArea.context.drawImage(
        this.image,
        frameWidth * 3, 0,
        frameWidth, frameHeight,
@@ -123,10 +124,10 @@ class Runner {
     this.isCrashed = false;
     this.isJumping = false;
     this.isFalling = false;
-    this.dy        = 0;
+    this.dy = 0;
     this.currentFrame = 0;
     this.counter = 0;
-    this.jumpTime = JUMP_TIME - level * 15;
+    this.jumpTime = JUMP_TIME - this.level * 15;
     this.jumpCounter = this.jumpTime;
   }
 
@@ -156,3 +157,5 @@ class Runner {
     return newHeight - oldHeight;
   }
 }
+
+module.exports = Runner;
