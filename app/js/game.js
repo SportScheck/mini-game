@@ -93,6 +93,10 @@ class MiniGame {
             this._hideSplashscreen(this.splashScreen);
           }
         });
+        window.addEventListener('click', e => {
+          e.preventDefault();
+          this._hideSplashscreen(this.splashScreen);
+        });
 
         const canvasElement = document.querySelector('#minigame');
 
