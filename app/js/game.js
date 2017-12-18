@@ -4,6 +4,8 @@ import Runner from './runner';
 import Score from './score';
 
 const GROUND_SPEED = 2;
+const SCORE_SIZE = 0.003;
+const HEADLINE_SIZE = 0.006;
 
 class MiniGame {
     constructor() {

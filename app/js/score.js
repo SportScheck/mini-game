@@ -2,6 +2,8 @@ const SCORE_FONT = '"Press Start 2P"';
 const SCORE_SIZE = 0.003;
 const HEADLINE_SIZE = 0.006;
 const SPACE = 40;
+const MAX_TEXT = 1.4;
+const MAX_HEADLINE = 2.5;
 
 class Score {
   constructor(gameArea) {
@@ -17,6 +19,15 @@ class Score {
      this.y = 40;
    }
 
+   _checkFontSize() {
+    if (this.size > MAX_TEXT) {
+      this.size = MAX_TEXT;
+    };
+    if(this.headlineSize > MAX_HEADLINE) {
+      this.headlineSize = MAX_HEADLINE;
+    };
+  }
+
   update() {
     const ctx = this.gameArea.context;
 
@@ -24,7 +35,9 @@ class Score {
 
     const text = 'GELAUFENE STRECKE: ' + this.distance + 'M';
 
-    ctx.font = this.size + 'rem' + ' ' + this.font;
+    this._checkFontSize();
+
+    ctx.font = this.size + 'em' + ' ' + this.font;
     ctx.fillStyle = this.color;
     ctx.textAlign="center";
     ctx.fillText(text, this.x, this.y);
@@ -51,12 +64,18 @@ class Score {
     ctx.fillStyle = this.color;
     ctx.textAlign = 'center';
 
+    this._checkFontSize()
+
     // define size and set headline on canvas
-    ctx.font = this.headlineSize + 'rem' + ' ' + this.font;
+    ctx.font = this.headlineSize + 'em' + ' ' + this.font;
     ctx.fillText(text, this.x, positionYText);
 
+    if(this.size > MAX_TEXT) {
+      this.size = MAX_TEXT;
+    };
+
     // define size and set text on canvas
-    ctx.font = this.size + 'rem' + ' ' + this.font;
+    ctx.font = this.size + 'em' + ' ' + this.font;
     ctx.fillText(text2, this.x, positionYText2);
     ctx.fillText(text3, this.x, positionYText3);
     ctx.fillText(text4, this.x, positionYText4);

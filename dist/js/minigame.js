@@ -60,6 +60,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var GROUND_SPEED = 2;
+var SCORE_SIZE = 0.003;
+var HEADLINE_SIZE = 0.006;
 
 var MiniGame = function () {
   function MiniGame() {
@@ -590,6 +592,8 @@ var SCORE_FONT = '"Press Start 2P"';
 var SCORE_SIZE = 0.003;
 var HEADLINE_SIZE = 0.006;
 var SPACE = 40;
+var MAX_TEXT = 1.4;
+var MAX_HEADLINE = 2.5;
 
 var Score = function () {
   function Score(gameArea) {
@@ -608,6 +612,16 @@ var Score = function () {
   }
 
   _createClass(Score, [{
+    key: '_checkFontSize',
+    value: function _checkFontSize() {
+      if (this.size > MAX_TEXT) {
+        this.size = MAX_TEXT;
+      };
+      if (this.headlineSize > MAX_HEADLINE) {
+        this.headlineSize = MAX_HEADLINE;
+      };
+    }
+  }, {
     key: 'update',
     value: function update() {
       var ctx = this.gameArea.context;
@@ -616,7 +630,9 @@ var Score = function () {
 
       var text = 'GELAUFENE STRECKE: ' + this.distance + 'M';
 
-      ctx.font = this.size + 'rem' + ' ' + this.font;
+      this._checkFontSize();
+
+      ctx.font = this.size + 'em' + ' ' + this.font;
       ctx.fillStyle = this.color;
       ctx.textAlign = "center";
       ctx.fillText(text, this.x, this.y);
@@ -644,12 +660,18 @@ var Score = function () {
       ctx.fillStyle = this.color;
       ctx.textAlign = 'center';
 
+      this._checkFontSize();
+
       // define size and set headline on canvas
-      ctx.font = this.headlineSize + 'rem' + ' ' + this.font;
+      ctx.font = this.headlineSize + 'em' + ' ' + this.font;
       ctx.fillText(text, this.x, positionYText);
 
+      if (this.size > MAX_TEXT) {
+        this.size = MAX_TEXT;
+      };
+
       // define size and set text on canvas
-      ctx.font = this.size + 'rem' + ' ' + this.font;
+      ctx.font = this.size + 'em' + ' ' + this.font;
       ctx.fillText(text2, this.x, positionYText2);
       ctx.fillText(text3, this.x, positionYText3);
       ctx.fillText(text4, this.x, positionYText4);
