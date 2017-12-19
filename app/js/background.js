@@ -7,6 +7,10 @@ class Background {
 		this.speed = speed;
 	}
 
+	updateSpeed(newSpeed) {
+		this.speed = newSpeed;
+	}
+
 	draw() {
 		// Pan background
 		this.x -= this.speed;

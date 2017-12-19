@@ -4,8 +4,6 @@ import Runner from './runner';
 import Score from './score';
 
 const GROUND_SPEED = 2;
-const SCORE_SIZE = 0.003;
-const HEADLINE_SIZE = 0.006;
 
 class MiniGame {
     constructor() {
@@ -23,22 +21,24 @@ class MiniGame {
         }
       };
 
-      this.myReq = null;
-      this.isCrashed = false;
-      this.splashScreen = false;
-      this.initalStart = true;
-      this.level = 0;
-      this.obstacleSpeed = GROUND_SPEED;
       this.totalAssets = 0;
       this.loadedAssets = 0;
-      this.images = new Array();
+      this.splashScreen = false;
+      this.initalStart = true;
 
+      this.myReq = null;
+      this.level = 0;
+
+      this.isCrashed = false;
+
+      this.images = {};
       this.ground = null;
       this.clouds = null;
       this.skyline = null;
       this.runner = null;
       this.score = null;
       this.obstaclesArray = new Array();
+      this.referenceSpeed = GROUND_SPEED;
 
       this._preloader();
     }
@@ -54,9 +54,7 @@ class MiniGame {
       this.gameArea.y = 300;
 
       if (type === 'resize') {
-        this.score.x = newCanvasWidth / 2;
-        this.score.size = SCORE_SIZE * (this.score.x * 2);
-        this.score.headlineSize = HEADLINE_SIZE * (this.score.x * 2);
+        this.score.onResize(newCanvasWidth)
       }
     }
 
@@ -74,13 +72,6 @@ class MiniGame {
     		timeout = setTimeout(later, wait);
     		if (callNow) func.apply(context, args);
     	};
-    }
-
-    _endScreen() {
-      this.gameArea.context.font = '15px GameFont';
-      this.gameArea.context.fillStyle = 'black';
-      this.gameArea.context.textAlign = 'center';
-      this.gameArea.context.fillText('this.text', 300, 60);
     }
 
     _assetLoaded() {
@@ -124,25 +115,26 @@ class MiniGame {
     }
 
     _preloader() {
-      // counter
-      var i = 0;
       // set image list
-      let urls = new Array();
-      urls[0] = 'http://i1.adis.ws/i/sportscheck/minigame_ground';
-      urls[1] = 'http://i1.adis.ws/i/sportscheck/minigame_clouds';
-      urls[2] = 'http://i1.adis.ws/i/sportscheck/minigame_skyline';
-      urls[3] = 'http://i1.adis.ws/i/sportscheck/minigame_runner_sprite';
-      urls[4] = 'http://i1.adis.ws/i/sportscheck/minigame_fire_sprite';
+      let urls = {
+        'ground': 'http://i1.adis.ws/i/sportscheck/minigame_ground',
+        'clouds': 'http://i1.adis.ws/i/sportscheck/minigame_clouds',
+        'skyline': 'http://i1.adis.ws/i/sportscheck/minigame_skyline',
+        'runner': 'http://i1.adis.ws/i/sportscheck/minigame_runner_sprite',
+        'fire': 'http://i1.adis.ws/i/sportscheck/minigame_fire_sprite'
+      };
 
-      this.totalAssets = urls.length;
+      this.totalAssets = Object.keys(urls).length;
       // start preloading
-      for(var i = 0; i < this.totalAssets; i++) {
-        this.images[i] = new Image();
-        this.images[i].onload = function() {
-          this._assetLoaded();
-        }.bind(this);
-        this.images[i].src = urls[i];
-      }
+      Object.entries(urls).forEach(
+        ([key, value]) => {
+          this.images[key] = new Image();
+          this.images[key].onload = function() {
+            this._assetLoaded();
+          }.bind(this);
+          this.images[key].src = value;
+        }
+      );
 
       this._loadFont();
     }
@@ -203,10 +195,10 @@ class MiniGame {
        this.score.update();
 
        if (this.isCrashed) {
-         this.runner.level = 0;
          this.runner.reset();
-         this.ground.speed = GROUND_SPEED;
-         this.obstacleSpeed = GROUND_SPEED;
+         this.ground.updateSpeed(GROUND_SPEED);
+
+         this.referenceSpeed = GROUND_SPEED;
          this.score.done();
          this.gameArea.stop();
          this.splashScreen = true;
@@ -219,26 +211,26 @@ class MiniGame {
     }
 
     _createObstacles() {
-      if (this.gameArea.frameNo == 1 || (this.gameArea.frameNo / 130 % 1 == 0)) {
+      if (this.gameArea.frameNo == 1 || (this.gameArea.frameNo / (130 - (this.level * 5)) % 1 == 0)) {
         const randomFactor = Math.floor(Math.random() * (100 - 1) + 1);
         if (randomFactor % 2 === 0) {
-          this.obstaclesArray.push(new Obstacle(this.gameArea, this.images[4], this.obstacleSpeed, 600 + randomFactor));
+          this.obstaclesArray.push(new Obstacle(this.gameArea, this.images.fire, this.referenceSpeed, 600 + randomFactor));
         }
       }
     }
 
-    _updateSpeed(obstacles, newSpeed) {
+    _updateObstaclesSpeed(obstacles, newSpeed) {
       for (let i = 0; i < obstacles.length; i++) {
-        obstacles[i].speed = newSpeed;
+        obstacles[i].updateSpeed(newSpeed);
       }
     }
 
     _nextLevel() {
       this.level += 1;
+      this.referenceSpeed = GROUND_SPEED + this.level / 2;
       this.runner.nextLevel(this.level);
-      this.ground.speed = GROUND_SPEED + this.level / 2;
-      this.obstacleSpeed = GROUND_SPEED + this.level / 2;
-      this._updateSpeed(this.obstaclesArray, this.obstacleSpeed);
+      this.ground.updateSpeed(this.referenceSpeed);
+      this._updateObstaclesSpeed(this.obstaclesArray, this.referenceSpeed);
     }
 
     _startGame() {
@@ -247,10 +239,10 @@ class MiniGame {
 
         this.gameArea.start();
 
-        this.skyline = new Background(this.gameArea, this.images[2], 0.3, 0, 40);
-        this.clouds = new Background(this.gameArea, this.images[1], 0.6, 0, 40);
-        this.ground = new Background(this.gameArea, this.images[0], GROUND_SPEED, 0, 280);
-        this.runner = new Runner(this.gameArea, this.images[3], this.level);
+        this.skyline = new Background(this.gameArea, this.images.skyline, 0.3, 0, 40);
+        this.clouds = new Background(this.gameArea, this.images.clouds, 0.6, 0, 40);
+        this.ground = new Background(this.gameArea, this.images.ground, GROUND_SPEED, 0, 280);
+        this.runner = new Runner(this.gameArea, this.images.runner, this.level);
         this.score = new Score(this.gameArea);
       } else {
         this.gameArea.frameNo = 0;

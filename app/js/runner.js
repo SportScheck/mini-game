@@ -47,24 +47,25 @@ class Runner {
     });
   }
 
-  nextLevel(level) {
-    this.level = level;
-    this.increaseLevel = true;
-  }
-
-  updateLevel() {
+  _updateLevel() {
     this.jumpTime = JUMP_TIME - this.level * 10;
     this.jumpCounter = this.jumpTime;
   }
 
-  jump() {
+  _calculateHeightChange(time) {
+    let oldHeight = - 450 * Math.pow((time/this.jumpTime - 0.5), 2);
+    let newHeight = - 450 * Math.pow(((time + 1)/this.jumpTime - 0.5), 2);
+    return newHeight - oldHeight;
+  }
+
+  _jump() {
     if (this.isJumping) {
-      this.dy -= this.calculateHeightChange(this.jumpTime - this.jumpCounter);
+      this.dy -= this._calculateHeightChange(this.jumpTime - this.jumpCounter);
       this.jumpCounter--;
     }
 
     if (this.isFalling) {
-      this.dy -= this.calculateHeightChange(this.jumpTime - this.jumpCounter);
+      this.dy -= this._calculateHeightChange(this.jumpTime - this.jumpCounter);
       this.jumpCounter--;
     }
 
@@ -79,6 +80,42 @@ class Runner {
     }
   }
 
+  _runningAnim(col, row, frameWidth, frameHeight, x, y) {
+    this.gameArea.context.drawImage(
+       this.image,
+       col * frameWidth, row * frameHeight,
+       frameWidth, frameHeight,
+       x, y + this.dy,
+       frameWidth, frameHeight);
+  }
+
+  _jumpingAnim(col, row, frameWidth, frameHeight, x, y) {
+    this.gameArea.context.drawImage(
+       this.image,
+       frameWidth, 0,
+       frameWidth, frameHeight,
+       x, y + this.dy,
+       frameWidth, frameHeight);
+  }
+
+  _crashAnim(col, row, frameWidth, frameHeight, x, y) {
+    this.gameArea.context.drawImage(
+       this.image,
+       frameWidth * 3, 0,
+       frameWidth, frameHeight,
+       x, y + this.dy,
+       frameWidth, frameHeight);
+  }
+
+  nextLevel(level) {
+    this.level = level;
+    this.increaseLevel = true;
+  }
+
+  crash() {
+    this.isCrashed = true;
+  }
+
   update() {
     // update to the next frame if it is time
     if (this.counter == (this.frameSpeed - 1)) {
@@ -87,43 +124,13 @@ class Runner {
 
     // update the counter
     this.counter = (this.counter + 1) % this.frameSpeed;
-  };
-
-  runningAnim(col, row, frameWidth, frameHeight, x, y) {
-    this.gameArea.context.drawImage(
-       this.image,
-       col * frameWidth, row * frameHeight,
-       frameWidth, frameHeight,
-       x, y + this.dy,
-       frameWidth, frameHeight);
-  };
-
-  jumpingAnim(col, row, frameWidth, frameHeight, x, y) {
-    this.gameArea.context.drawImage(
-       this.image,
-       frameWidth, 0,
-       frameWidth, frameHeight,
-       x, y + this.dy,
-       frameWidth, frameHeight);
-  };
-
-  crashAnim(col, row, frameWidth, frameHeight, x, y) {
-    this.gameArea.context.drawImage(
-       this.image,
-       frameWidth * 3, 0,
-       frameWidth, frameHeight,
-       x, y + this.dy,
-       frameWidth, frameHeight);
-  };
-
-  crash() {
-    this.isCrashed = true;
   }
 
   reset() {
     this.isCrashed = false;
     this.isJumping = false;
     this.isFalling = false;
+    this.level = 0;
     this.dy = 0;
     this.currentFrame = 0;
     this.counter = 0;
@@ -136,25 +143,19 @@ class Runner {
       const row = Math.floor(this.currentFrame / this.framesPerRow);
       const col = Math.floor(this.currentFrame % this.framesPerRow);
 
-      this.jump();
+      this._jump();
 
       if (this.isCrashed) {
-        this.crashAnim(col, row, this.frameWidth, this.frameHeight, this.x, this.y)
+        this._crashAnim(col, row, this.frameWidth, this.frameHeight, this.x, this.y)
       } else if (this.isJumping || this.isFalling) {
-        this.jumpingAnim(col, row, this.frameWidth, this.frameHeight, this.x, this.y);
+        this._jumpingAnim(col, row, this.frameWidth, this.frameHeight, this.x, this.y);
       } else {
         if (this.increaseLevel) {
-          this.updateLevel();
+          this._updateLevel();
           this.increaseLevel = false;
         }
-        this.runningAnim(col, row, this.frameWidth, this.frameHeight, this.x, this.y);
+        this._runningAnim(col, row, this.frameWidth, this.frameHeight, this.x, this.y);
       }
-  };
-
-  calculateHeightChange(time) {
-    let oldHeight = - 450 * Math.pow((time/this.jumpTime - 0.5), 2);
-    let newHeight = - 450 * Math.pow(((time + 1)/this.jumpTime - 0.5), 2);
-    return newHeight - oldHeight;
   }
 }
 

@@ -28,6 +28,12 @@ class Score {
     };
   }
 
+  onResize(newCanvasWidth) {
+    this.x = newCanvasWidth / 2;
+    this.size = SCORE_SIZE * (this.x * 2);
+    this.headlineSize = HEADLINE_SIZE * (this.x * 2);
+  }
+
   update() {
     const ctx = this.gameArea.context;
 

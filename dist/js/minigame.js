@@ -17,6 +17,11 @@ var Background = function () {
 	}
 
 	_createClass(Background, [{
+		key: "updateSpeed",
+		value: function updateSpeed(newSpeed) {
+			this.speed = newSpeed;
+		}
+	}, {
 		key: "draw",
 		value: function draw() {
 			// Pan background
@@ -36,6 +41,8 @@ module.exports = Background;
 
 },{}],2:[function(require,module,exports){
 'use strict';
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -60,8 +67,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var GROUND_SPEED = 2;
-var SCORE_SIZE = 0.003;
-var HEADLINE_SIZE = 0.006;
 
 var MiniGame = function () {
   function MiniGame() {
@@ -81,22 +86,24 @@ var MiniGame = function () {
       }
     };
 
-    this.myReq = null;
-    this.isCrashed = false;
-    this.splashScreen = false;
-    this.initalStart = true;
-    this.level = 0;
-    this.obstacleSpeed = GROUND_SPEED;
     this.totalAssets = 0;
     this.loadedAssets = 0;
-    this.images = new Array();
+    this.splashScreen = false;
+    this.initalStart = true;
 
+    this.myReq = null;
+    this.level = 0;
+
+    this.isCrashed = false;
+
+    this.images = {};
     this.ground = null;
     this.clouds = null;
     this.skyline = null;
     this.runner = null;
     this.score = null;
     this.obstaclesArray = new Array();
+    this.referenceSpeed = GROUND_SPEED;
 
     this._preloader();
   }
@@ -114,9 +121,7 @@ var MiniGame = function () {
       this.gameArea.y = 300;
 
       if (type === 'resize') {
-        this.score.x = newCanvasWidth / 2;
-        this.score.size = SCORE_SIZE * (this.score.x * 2);
-        this.score.headlineSize = HEADLINE_SIZE * (this.score.x * 2);
+        this.score.onResize(newCanvasWidth);
       }
     }
   }, {
@@ -135,14 +140,6 @@ var MiniGame = function () {
         timeout = setTimeout(later, wait);
         if (callNow) func.apply(context, args);
       };
-    }
-  }, {
-    key: '_endScreen',
-    value: function _endScreen() {
-      this.gameArea.context.font = '15px GameFont';
-      this.gameArea.context.fillStyle = 'black';
-      this.gameArea.context.textAlign = 'center';
-      this.gameArea.context.fillText('this.text', 300, 60);
     }
   }, {
     key: '_assetLoaded',
@@ -192,25 +189,30 @@ var MiniGame = function () {
   }, {
     key: '_preloader',
     value: function _preloader() {
-      // counter
-      var i = 0;
-      // set image list
-      var urls = new Array();
-      urls[0] = 'http://i1.adis.ws/i/sportscheck/minigame_ground';
-      urls[1] = 'http://i1.adis.ws/i/sportscheck/minigame_clouds';
-      urls[2] = 'http://i1.adis.ws/i/sportscheck/minigame_skyline';
-      urls[3] = 'http://i1.adis.ws/i/sportscheck/minigame_runner_sprite';
-      urls[4] = 'http://i1.adis.ws/i/sportscheck/minigame_fire_sprite';
+      var _this3 = this;
 
-      this.totalAssets = urls.length;
+      // set image list
+      var urls = {
+        'ground': 'http://i1.adis.ws/i/sportscheck/minigame_ground',
+        'clouds': 'http://i1.adis.ws/i/sportscheck/minigame_clouds',
+        'skyline': 'http://i1.adis.ws/i/sportscheck/minigame_skyline',
+        'runner': 'http://i1.adis.ws/i/sportscheck/minigame_runner_sprite',
+        'fire': 'http://i1.adis.ws/i/sportscheck/minigame_fire_sprite'
+      };
+
+      this.totalAssets = Object.keys(urls).length;
       // start preloading
-      for (var i = 0; i < this.totalAssets; i++) {
-        this.images[i] = new Image();
-        this.images[i].onload = function () {
+      Object.entries(urls).forEach(function (_ref) {
+        var _ref2 = _slicedToArray(_ref, 2),
+            key = _ref2[0],
+            value = _ref2[1];
+
+        _this3.images[key] = new Image();
+        _this3.images[key].onload = function () {
           this._assetLoaded();
-        }.bind(this);
-        this.images[i].src = urls[i];
-      }
+        }.bind(_this3);
+        _this3.images[key].src = value;
+      });
 
       this._loadFont();
     }
@@ -233,14 +235,14 @@ var MiniGame = function () {
   }, {
     key: '_animate',
     value: function _animate() {
-      var _this3 = this;
+      var _this4 = this;
 
       this.myReq = window.requestAnimationFrame(this._animate.bind(this));
 
       this.gameArea.context.clearRect(0, 0, this.gameArea.canvas.width, this.gameArea.canvas.height);
 
       this.obstaclesArray.forEach(function (obstacle) {
-        _this3._crash(_this3.runner, obstacle);
+        _this4._crash(_this4.runner, obstacle);
       });
 
       this.skyline.draw();
@@ -259,14 +261,14 @@ var MiniGame = function () {
         obstacle.update();
         obstacle.draw();
 
-        var obstacleNo = _this3.obstaclesArray.length;
+        var obstacleNo = _this4.obstaclesArray.length;
 
         if (obstacleNo > 6) {
           var i = 0;
 
           while (i < obstacleNo - 2) {
             i++;
-            _this3.obstaclesArray.shift();
+            _this4.obstaclesArray.shift();
           }
         }
       });
@@ -274,10 +276,10 @@ var MiniGame = function () {
       this.score.update();
 
       if (this.isCrashed) {
-        this.runner.level = 0;
         this.runner.reset();
-        this.ground.speed = GROUND_SPEED;
-        this.obstacleSpeed = GROUND_SPEED;
+        this.ground.updateSpeed(GROUND_SPEED);
+
+        this.referenceSpeed = GROUND_SPEED;
         this.score.done();
         this.gameArea.stop();
         this.splashScreen = true;
@@ -291,28 +293,28 @@ var MiniGame = function () {
   }, {
     key: '_createObstacles',
     value: function _createObstacles() {
-      if (this.gameArea.frameNo == 1 || this.gameArea.frameNo / 130 % 1 == 0) {
+      if (this.gameArea.frameNo == 1 || this.gameArea.frameNo / (130 - this.level * 5) % 1 == 0) {
         var randomFactor = Math.floor(Math.random() * (100 - 1) + 1);
         if (randomFactor % 2 === 0) {
-          this.obstaclesArray.push(new _obstacle2.default(this.gameArea, this.images[4], this.obstacleSpeed, 600 + randomFactor));
+          this.obstaclesArray.push(new _obstacle2.default(this.gameArea, this.images.fire, this.referenceSpeed, 600 + randomFactor));
         }
       }
     }
   }, {
-    key: '_updateSpeed',
-    value: function _updateSpeed(obstacles, newSpeed) {
+    key: '_updateObstaclesSpeed',
+    value: function _updateObstaclesSpeed(obstacles, newSpeed) {
       for (var i = 0; i < obstacles.length; i++) {
-        obstacles[i].speed = newSpeed;
+        obstacles[i].updateSpeed(newSpeed);
       }
     }
   }, {
     key: '_nextLevel',
     value: function _nextLevel() {
       this.level += 1;
+      this.referenceSpeed = GROUND_SPEED + this.level / 2;
       this.runner.nextLevel(this.level);
-      this.ground.speed = GROUND_SPEED + this.level / 2;
-      this.obstacleSpeed = GROUND_SPEED + this.level / 2;
-      this._updateSpeed(this.obstaclesArray, this.obstacleSpeed);
+      this.ground.updateSpeed(this.referenceSpeed);
+      this._updateObstaclesSpeed(this.obstaclesArray, this.referenceSpeed);
     }
   }, {
     key: '_startGame',
@@ -322,10 +324,10 @@ var MiniGame = function () {
 
         this.gameArea.start();
 
-        this.skyline = new _background2.default(this.gameArea, this.images[2], 0.3, 0, 40);
-        this.clouds = new _background2.default(this.gameArea, this.images[1], 0.6, 0, 40);
-        this.ground = new _background2.default(this.gameArea, this.images[0], GROUND_SPEED, 0, 280);
-        this.runner = new _runner2.default(this.gameArea, this.images[3], this.level);
+        this.skyline = new _background2.default(this.gameArea, this.images.skyline, 0.3, 0, 40);
+        this.clouds = new _background2.default(this.gameArea, this.images.clouds, 0.6, 0, 40);
+        this.ground = new _background2.default(this.gameArea, this.images.ground, GROUND_SPEED, 0, 280);
+        this.runner = new _runner2.default(this.gameArea, this.images.runner, this.level);
         this.score = new _score2.default(this.gameArea);
       } else {
         this.gameArea.frameNo = 0;
@@ -381,6 +383,11 @@ var Obstacle = function () {
   }
 
   _createClass(Obstacle, [{
+    key: "updateSpeed",
+    value: function updateSpeed(newSpeed) {
+      this.speed = newSpeed;
+    }
+  }, {
     key: "update",
     value: function update() {
       // update to the next frame if it is time
@@ -469,27 +476,28 @@ var Runner = function () {
   }
 
   _createClass(Runner, [{
-    key: 'nextLevel',
-    value: function nextLevel(level) {
-      this.level = level;
-      this.increaseLevel = true;
-    }
-  }, {
-    key: 'updateLevel',
-    value: function updateLevel() {
+    key: '_updateLevel',
+    value: function _updateLevel() {
       this.jumpTime = JUMP_TIME - this.level * 10;
       this.jumpCounter = this.jumpTime;
     }
   }, {
-    key: 'jump',
-    value: function jump() {
+    key: '_calculateHeightChange',
+    value: function _calculateHeightChange(time) {
+      var oldHeight = -450 * Math.pow(time / this.jumpTime - 0.5, 2);
+      var newHeight = -450 * Math.pow((time + 1) / this.jumpTime - 0.5, 2);
+      return newHeight - oldHeight;
+    }
+  }, {
+    key: '_jump',
+    value: function _jump() {
       if (this.isJumping) {
-        this.dy -= this.calculateHeightChange(this.jumpTime - this.jumpCounter);
+        this.dy -= this._calculateHeightChange(this.jumpTime - this.jumpCounter);
         this.jumpCounter--;
       }
 
       if (this.isFalling) {
-        this.dy -= this.calculateHeightChange(this.jumpTime - this.jumpCounter);
+        this.dy -= this._calculateHeightChange(this.jumpTime - this.jumpCounter);
         this.jumpCounter--;
       }
 
@@ -504,6 +512,32 @@ var Runner = function () {
       }
     }
   }, {
+    key: '_runningAnim',
+    value: function _runningAnim(col, row, frameWidth, frameHeight, x, y) {
+      this.gameArea.context.drawImage(this.image, col * frameWidth, row * frameHeight, frameWidth, frameHeight, x, y + this.dy, frameWidth, frameHeight);
+    }
+  }, {
+    key: '_jumpingAnim',
+    value: function _jumpingAnim(col, row, frameWidth, frameHeight, x, y) {
+      this.gameArea.context.drawImage(this.image, frameWidth, 0, frameWidth, frameHeight, x, y + this.dy, frameWidth, frameHeight);
+    }
+  }, {
+    key: '_crashAnim',
+    value: function _crashAnim(col, row, frameWidth, frameHeight, x, y) {
+      this.gameArea.context.drawImage(this.image, frameWidth * 3, 0, frameWidth, frameHeight, x, y + this.dy, frameWidth, frameHeight);
+    }
+  }, {
+    key: 'nextLevel',
+    value: function nextLevel(level) {
+      this.level = level;
+      this.increaseLevel = true;
+    }
+  }, {
+    key: 'crash',
+    value: function crash() {
+      this.isCrashed = true;
+    }
+  }, {
     key: 'update',
     value: function update() {
       // update to the next frame if it is time
@@ -515,31 +549,12 @@ var Runner = function () {
       this.counter = (this.counter + 1) % this.frameSpeed;
     }
   }, {
-    key: 'runningAnim',
-    value: function runningAnim(col, row, frameWidth, frameHeight, x, y) {
-      this.gameArea.context.drawImage(this.image, col * frameWidth, row * frameHeight, frameWidth, frameHeight, x, y + this.dy, frameWidth, frameHeight);
-    }
-  }, {
-    key: 'jumpingAnim',
-    value: function jumpingAnim(col, row, frameWidth, frameHeight, x, y) {
-      this.gameArea.context.drawImage(this.image, frameWidth, 0, frameWidth, frameHeight, x, y + this.dy, frameWidth, frameHeight);
-    }
-  }, {
-    key: 'crashAnim',
-    value: function crashAnim(col, row, frameWidth, frameHeight, x, y) {
-      this.gameArea.context.drawImage(this.image, frameWidth * 3, 0, frameWidth, frameHeight, x, y + this.dy, frameWidth, frameHeight);
-    }
-  }, {
-    key: 'crash',
-    value: function crash() {
-      this.isCrashed = true;
-    }
-  }, {
     key: 'reset',
     value: function reset() {
       this.isCrashed = false;
       this.isJumping = false;
       this.isFalling = false;
+      this.level = 0;
       this.dy = 0;
       this.currentFrame = 0;
       this.counter = 0;
@@ -553,26 +568,19 @@ var Runner = function () {
       var row = Math.floor(this.currentFrame / this.framesPerRow);
       var col = Math.floor(this.currentFrame % this.framesPerRow);
 
-      this.jump();
+      this._jump();
 
       if (this.isCrashed) {
-        this.crashAnim(col, row, this.frameWidth, this.frameHeight, this.x, this.y);
+        this._crashAnim(col, row, this.frameWidth, this.frameHeight, this.x, this.y);
       } else if (this.isJumping || this.isFalling) {
-        this.jumpingAnim(col, row, this.frameWidth, this.frameHeight, this.x, this.y);
+        this._jumpingAnim(col, row, this.frameWidth, this.frameHeight, this.x, this.y);
       } else {
         if (this.increaseLevel) {
-          this.updateLevel();
+          this._updateLevel();
           this.increaseLevel = false;
         }
-        this.runningAnim(col, row, this.frameWidth, this.frameHeight, this.x, this.y);
+        this._runningAnim(col, row, this.frameWidth, this.frameHeight, this.x, this.y);
       }
-    }
-  }, {
-    key: 'calculateHeightChange',
-    value: function calculateHeightChange(time) {
-      var oldHeight = -450 * Math.pow(time / this.jumpTime - 0.5, 2);
-      var newHeight = -450 * Math.pow((time + 1) / this.jumpTime - 0.5, 2);
-      return newHeight - oldHeight;
     }
   }]);
 
@@ -620,6 +628,13 @@ var Score = function () {
       if (this.headlineSize > MAX_HEADLINE) {
         this.headlineSize = MAX_HEADLINE;
       };
+    }
+  }, {
+    key: 'onResize',
+    value: function onResize(newCanvasWidth) {
+      this.x = newCanvasWidth / 2;
+      this.size = SCORE_SIZE * (this.x * 2);
+      this.headlineSize = HEADLINE_SIZE * (this.x * 2);
     }
   }, {
     key: 'update',

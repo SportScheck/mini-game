@@ -18,6 +18,10 @@ class Obstacle {
 		this.speed = speed;
 	}
 
+	updateSpeed(newSpeed) {
+		this.speed = newSpeed;
+	}
+
   update() {
     // update to the next frame if it is time
     if (this.counter == (this.frameSpeed - 1)) {
