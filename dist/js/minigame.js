@@ -163,7 +163,7 @@ var MiniGame = function () {
         var canvasElement = document.querySelector('#minigame');
 
         canvasElement.addEventListener('touchstart', this._hideSplashscreen);
-        canvasElement.addEventListener('click', this._hideSplashscreen);
+        canvasElement.addEventListener('mousedown', this._hideSplashscreen);
       }
     }
   }, {
@@ -463,7 +463,7 @@ var Runner = function () {
         self.isJumping = true;
       }
     });
-    canvasElement.addEventListener('click', function (e) {
+    canvasElement.addEventListener('mousedown', function (e) {
       if (!self.isFalling) {
         self.isJumping = true;
       }

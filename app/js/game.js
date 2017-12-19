@@ -92,7 +92,7 @@ class MiniGame {
         const canvasElement = document.querySelector('#minigame');
 
         canvasElement.addEventListener('touchstart', this._hideSplashscreen);
-        canvasElement.addEventListener('click', this._hideSplashscreen);
+        canvasElement.addEventListener('mousedown', this._hideSplashscreen);
       }
     }
 
