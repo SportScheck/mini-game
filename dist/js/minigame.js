@@ -155,10 +155,6 @@ var MiniGame = function () {
             _this2._hideSplashscreen(_this2.splashScreen);
           }
         });
-        window.addEventListener('click', function (e) {
-          e.preventDefault();
-          _this2._hideSplashscreen(_this2.splashScreen);
-        });
 
         var canvasElement = document.querySelector('#minigame');
 
