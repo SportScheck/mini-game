@@ -81,18 +81,22 @@ class MiniGame {
         window.addEventListener('keydown', e => {
           if(e.keyCode == 32) {
             e.preventDefault();
-            this._hideSplashscreen(this.splashScreen);
+            this._hideSplashscreen();
           }
         });
 
         const canvasElement = document.querySelector('#minigame');
 
-        canvasElement.addEventListener('touchstart', this._hideSplashscreen);
-        canvasElement.addEventListener('mousedown', this._hideSplashscreen);
+        canvasElement.addEventListener('touchstart', () => {
+          this._hideSplashscreen();
+        });
+        canvasElement.addEventListener('mousedown', () => {
+          this._hideSplashscreen();
+        });
       }
     }
 
-    _hideSplashscreen(e) {
+    _hideSplashscreen() {
       if (this.splashScreen === true) {
         this.splashScreen = false;
         document.getElementById('minigame').style.display = 'block';
@@ -122,13 +126,13 @@ class MiniGame {
 
       this.totalAssets = Object.keys(urls).length;
       // start preloading
-      Object.entries(urls).forEach(
-        ([key, value]) => {
+      Object.keys(urls).forEach(
+        (key) => {
           this.images[key] = new Image();
           this.images[key].onload = function() {
             this._assetLoaded();
           }.bind(this);
-          this.images[key].src = value;
+          this.images[key].src = urls[key];
         }
       );
 

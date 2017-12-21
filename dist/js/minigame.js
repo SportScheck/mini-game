@@ -42,8 +42,6 @@ module.exports = Background;
 },{}],2:[function(require,module,exports){
 'use strict';
 
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _background = require('./background');
@@ -152,19 +150,23 @@ var MiniGame = function () {
         window.addEventListener('keydown', function (e) {
           if (e.keyCode == 32) {
             e.preventDefault();
-            _this2._hideSplashscreen(_this2.splashScreen);
+            _this2._hideSplashscreen();
           }
         });
 
         var canvasElement = document.querySelector('#minigame');
 
-        canvasElement.addEventListener('touchstart', this._hideSplashscreen);
-        canvasElement.addEventListener('mousedown', this._hideSplashscreen);
+        canvasElement.addEventListener('touchstart', function () {
+          _this2._hideSplashscreen();
+        });
+        canvasElement.addEventListener('mousedown', function () {
+          _this2._hideSplashscreen();
+        });
       }
     }
   }, {
     key: '_hideSplashscreen',
-    value: function _hideSplashscreen(e) {
+    value: function _hideSplashscreen() {
       if (this.splashScreen === true) {
         this.splashScreen = false;
         document.getElementById('minigame').style.display = 'block';
@@ -198,16 +200,12 @@ var MiniGame = function () {
 
       this.totalAssets = Object.keys(urls).length;
       // start preloading
-      Object.entries(urls).forEach(function (_ref) {
-        var _ref2 = _slicedToArray(_ref, 2),
-            key = _ref2[0],
-            value = _ref2[1];
-
+      Object.keys(urls).forEach(function (key) {
         _this3.images[key] = new Image();
         _this3.images[key].onload = function () {
           this._assetLoaded();
         }.bind(_this3);
-        _this3.images[key].src = value;
+        _this3.images[key].src = urls[key];
       });
 
       this._loadFont();
