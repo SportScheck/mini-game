@@ -1,12 +1,14 @@
-var gulp = require('gulp');
-var babelify = require('babelify');
-var browserify = require('browserify');
-var source = require('vinyl-source-stream');
-var buffer = require('vinyl-buffer');
-var path = require('path');
+const gulp = require('gulp');
+const babelify = require('babelify');
+const browserify = require('browserify');
+const source = require('vinyl-source-stream');
+const buffer = require('vinyl-buffer');
+const path = require('path');
+const uglify = require('gulp-uglify');
 
-var gulpIf = require('gulp-if');
-var browserSync = require('browser-sync').create();
+const gulpIf = require('gulp-if');
+const browserSync = require('browser-sync').create();
+const rename = require('gulp-rename');
 
 gulp.task('scripts', () => {
   browserify({
@@ -19,7 +21,14 @@ gulp.task('scripts', () => {
   .pipe(gulp.dest('dist/js'))
 });
 
-gulp.task('browserSync', ['scripts'], function() {
+gulp.task('bundleJS', ['scripts'], () => {
+  gulp.src('dist/js/minigame.js')
+  .pipe(rename('minigame.min.js'))
+  .pipe(uglify())
+  .pipe(gulp.dest('dist/js'))
+})
+
+gulp.task('browserSync', ['bundleJS'], function() {
   browserSync.init({
     server: {
       baseDir: 'dist'
@@ -27,7 +36,7 @@ gulp.task('browserSync', ['scripts'], function() {
   })
 });
 
-gulp.task('js-watch', ['scripts'], function (done) {
+gulp.task('js-watch', ['bundleJS'], function (done) {
     browserSync.reload();
     done();
 });
@@ -44,4 +53,4 @@ gulp.task('watch', ['copy-index-html', 'browserSync'], function (){
   gulp.watch('app/js/**/*.js', ['js-watch']);
 });
 
-gulp.task('build', ['copy-index-html', 'scripts']);
+gulp.task('build', ['copy-index-html', 'bundleJS']);
