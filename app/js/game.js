@@ -117,11 +117,11 @@ class MiniGame {
     _preloader() {
       // set image list
       let urls = {
-        'ground': 'http://i1.adis.ws/i/sportscheck/minigame_ground',
-        'clouds': 'http://i1.adis.ws/i/sportscheck/minigame_clouds',
-        'skyline': 'http://i1.adis.ws/i/sportscheck/minigame_skyline',
-        'runner': 'http://i1.adis.ws/i/sportscheck/minigame_runner_sprite',
-        'fire': 'http://i1.adis.ws/i/sportscheck/minigame_fire_sprite'
+        'ground': 'https://amp.sportscheck.com/i/sportscheck/minigame_ground',
+        'clouds': 'https://amp.sportscheck.com/i/sportscheck/minigame_clouds',
+        'skyline': 'https://amp.sportscheck.com/i/sportscheck/minigame_skyline',
+        'runner': 'https://amp.sportscheck.com/i/sportscheck/minigame_runner_sprite',
+        'fire': 'https://amp.sportscheck.com/i/sportscheck/minigame_fire_sprite'
       };
 
       this.totalAssets = Object.keys(urls).length;
