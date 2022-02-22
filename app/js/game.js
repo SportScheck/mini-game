@@ -104,16 +104,6 @@ class MiniGame {
       }
     }
 
-    _loadFont() {
-      let head = document.getElementsByTagName('head')[0];
-
-      let newStyle = document.createElement('link');
-      newStyle.href = 'https://fonts.googleapis.com/css?family=Press+Start+2P';
-      newStyle.rel = 'stylesheet';
-
-      document.head.appendChild(newStyle);
-    }
-
     _preloader() {
       // set image list
       let urls = {
@@ -135,8 +125,6 @@ class MiniGame {
           this.images[key].src = urls[key];
         }
       );
-
-      this._loadFont();
     }
 
     _crash(runner, obstacle) {
