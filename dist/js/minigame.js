@@ -174,17 +174,6 @@ var MiniGame = function () {
       }
     }
   }, {
-    key: '_loadFont',
-    value: function _loadFont() {
-      var head = document.getElementsByTagName('head')[0];
-
-      var newStyle = document.createElement('link');
-      newStyle.href = 'https://fonts.googleapis.com/css?family=Press+Start+2P';
-      newStyle.rel = 'stylesheet';
-
-      document.head.appendChild(newStyle);
-    }
-  }, {
     key: '_preloader',
     value: function _preloader() {
       var _this3 = this;
@@ -207,8 +196,6 @@ var MiniGame = function () {
         }.bind(_this3);
         _this3.images[key].src = urls[key];
       });
-
-      this._loadFont();
     }
   }, {
     key: '_crash',
